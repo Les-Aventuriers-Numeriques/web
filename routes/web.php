@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Hub\Home as HubHome;
+use App\Http\Controllers\Site\Home as SiteHome;
+use App\Http\Controllers\Site\Lan;
 use Illuminate\Support\Facades\Route;
 
 $domainName = config('team-lan.domain_name');
@@ -10,13 +13,13 @@ Route::name('web.')
         Route::domain($domainName)
             ->name('site.')
             ->group(function () {
-                Route::view('/', 'site.home')->name('home');
-                Route::view('/lan', 'site.lan')->name('lan');
+                Route::get('/', SiteHome::class)->name('home');
+                Route::get('/lan', Lan::class)->name('lan');
             });
 
         Route::domain("$hubSubdomainName.$domainName")
             ->name('hub.')
             ->group(function () {
-                Route::view('/', 'hub.home')->name('home');
+                Route::get('/', HubHome::class)->name('home');
             });
     });
