@@ -12,6 +12,7 @@ Route::name('web.')
     ->group(function () use ($hubSubdomainName, $domainName) {
         Route::domain($domainName)
             ->name('site.')
+            ->withoutMiddleware('web')
             ->group(function () {
                 Route::get('/', SiteHome::class)->name('home');
                 Route::get('/lan', Lan::class)->name('lan');
