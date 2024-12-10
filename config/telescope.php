@@ -1,6 +1,6 @@
 <?php
 
-if (env('APP_ENV', 'production') == 'production') {
+if (env('APP_ENV') == 'production') {
     return [];
 }
 
