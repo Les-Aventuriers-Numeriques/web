@@ -1,5 +1,9 @@
 <?php
 
+if (env('APP_ENV') == 'production') {
+    return [];
+}
+
 use Laravel\Telescope\EntryType;
 
 return [
@@ -59,11 +63,11 @@ return [
      |
      */
     'middleware' => [
-        'telescope'
+        'telescope',
     ],
 
     'asset_middleware' => [
-        'web'
+        'web',
     ],
 
     /*
