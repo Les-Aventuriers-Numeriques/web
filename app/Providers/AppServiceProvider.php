@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use SocialiteProviders\Discord\Provider;
+use SocialiteProviders\Manager\SocialiteWasCalled;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         if ($this->app->environment('local')) {
@@ -19,11 +19,10 @@ class AppServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        //
+        Event::listen(function (SocialiteWasCalled $event) {
+            $event->extendSocialite('discord', Provider::class);
+        });
     }
 }
