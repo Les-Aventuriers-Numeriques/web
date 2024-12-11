@@ -27,7 +27,8 @@ Route::name('web.')
                 Route::name('auth.')
                     ->prefix('connexion')
                     ->group(function () {
-                        Route::get('', [Auth::class, 'redirect'])->name('redirect');
+                        Route::get('', [Auth::class, 'login'])->name('login');
+                        Route::get('redirect', [Auth::class, 'redirect'])->name('redirect');
                         Route::get('callback', [Auth::class, 'callback'])->name('callback');
                     });
             });
