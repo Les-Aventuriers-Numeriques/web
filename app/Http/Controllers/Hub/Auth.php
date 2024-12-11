@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Hub;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Facades\Socialite;
