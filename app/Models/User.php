@@ -22,6 +22,13 @@ class User extends Authenticatable
     ];
 
     /**
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'must_relogin' => false,
+    ];
+
+    /**
      * @return array<string, string>
      */
     protected function casts(): array

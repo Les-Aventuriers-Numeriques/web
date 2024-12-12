@@ -36,11 +36,19 @@ return [
     ],
 
     'discord' => [
-        'client_id' => env('DISCORD_CLIENT_ID'),
+        'client_id' => env('DISCORD_APPLICATION_ID'),
         'client_secret' => env('DISCORD_CLIENT_SECRET'),
         'redirect' => env('DISCORD_REDIRECT_URI'),
 
         'allow_gif_avatars' => (bool) env('DISCORD_AVATAR_GIF', true),
         'avatar_default_extension' => env('DISCORD_EXTENSION_DEFAULT', 'png'),
+
+        'scopes' => ['guilds.members.read'],
+
+        'guild_id' => env('DISCORD_GUILD_ID'),
+
+        'member_role_id' => env('DISCORD_MEMBER_ROLE_ID'),
+        'lan_participant_role_id' => env('DISCORD_LAN_PARTICIPANT_ROLE_ID'),
+        'admin_role_id' => env('DISCORD_ADMIN_ROLE_ID'),
     ],
 ];

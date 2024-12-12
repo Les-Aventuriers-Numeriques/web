@@ -5,6 +5,6 @@
     <title>Home</title>
 </head>
 <body>
-    <p>Home</p>
+    <p>Home <a href="{{ route('web.hub.auth.login') }}">Login</a></p>
 </body>
 </html>
