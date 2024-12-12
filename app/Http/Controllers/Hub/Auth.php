@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\Auth as AuthService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth as AuthFacade;
 
@@ -16,6 +17,19 @@ class Auth extends Controller
     public function login(): View
     {
         return view('hub.login');
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        $username = AuthFacade::user()->display_name;
+
+        AuthFacade::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return to_route('web.hub.auth.login')
+            ->with('success', "À plus $username !");
     }
 
     public function redirect(): RedirectResponse

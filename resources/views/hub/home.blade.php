@@ -5,6 +5,6 @@
     <title>Home</title>
 </head>
 <body>
-    <p>Home <a href="{{ route('web.hub.auth.login') }}">Login</a></p>
+    <p>Home @guest<a href="{{ route('web.hub.auth.login') }}">Login</a>@else<a href="{{ route('web.hub.auth.logout') }}">Logout</a>@endguest</p>
 </body>
 </html>
