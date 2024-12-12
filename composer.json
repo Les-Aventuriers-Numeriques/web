@@ -13,6 +13,7 @@
         "laravel/framework": "^11.31",
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
+        "nwilging/laravel-discord-bot": "^1.1",
         "socialiteproviders/discord": "^4.2"
     },
     "require-dev": {
