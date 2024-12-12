@@ -25,19 +25,13 @@ class Auth extends Controller
 
     public function callback(): RedirectResponse
     {
-        $discordUser = $this->auth->user();
-        $user = User::find($discordUser->getId());
-        $isNewUser = ! $user instanceof User;
+        $discordUser = $this->auth->discordUser();
 
         $membershipInfoResponse = $this->auth->membershipInfo($discordUser);
 
         if (! $membershipInfoResponse->ok()) {
-            if ($user) {
-                // TODO Suppression de tous les rôles
-            }
-
             return to_route('web.hub.auth.login')
-                ->with('warning', sprintf('Tu n\'est %s présent sur notre serveur Discord.', $user ? 'plus' : 'pas'));
+                ->with('warning', 'Tu n\'est pas présent sur notre serveur Discord.');
         }
 
         $membershipInfo = $membershipInfoResponse->object();
@@ -48,6 +42,9 @@ class Auth extends Controller
         $isLanParticipant = in_array(config('services.discord.member_role_id'), $roles);
         $isAdmin = in_array(config('services.discord.member_role_id'), $roles);
         $hasAnyRole = $isMember || $isLanParticipant || $isAdmin;
+
+        $user = User::find($discordUser->getId());
+        $isNewUser = ! $user instanceof User;
 
         if ($isNewUser) {
             if (! $hasAnyRole) {
@@ -76,9 +73,12 @@ class Auth extends Controller
             $user->avatar_url = "https://cdn.discordapp.com/avatars/{$discordUser->getId()}/$userAvatarHash.png";
         }
 
-        $user->save();
+        $user->is_member = $isMember;
+        $user->is_lan_participant = $isLanParticipant;
+        $user->is_admin = $isAdmin;
+        $user->must_relogin = false;
 
-        // TODO MàJ des rôles
+        $user->save();
 
         if (! $hasAnyRole) {
             return to_route('web.hub.auth.login')

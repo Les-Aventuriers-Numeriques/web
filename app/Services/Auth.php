@@ -19,7 +19,7 @@ class Auth
             ->redirect();
     }
 
-    public function user(): User
+    public function discordUser(): User
     {
         return $this
             ->socialite()

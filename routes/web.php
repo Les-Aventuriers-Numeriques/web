@@ -10,16 +10,16 @@ $domainName = config('team-lan.domain_name');
 
 Route::name('web.')
     ->group(function () use ($domainName) {
-        Route::domain($domainName)
-            ->name('site.')
+        Route::name('site.')
+            ->domain($domainName)
             ->withoutMiddleware('web')
             ->group(function () {
                 Route::get('', SiteHome::class)->name('home');
                 Route::get('lan', Lan::class)->name('lan');
             });
 
-        Route::domain("hub.$domainName")
-            ->name('hub.')
+        Route::name('hub.')
+            ->domain("hub.$domainName")
             ->group(function () {
                 Route::get('', HubHome::class)->name('home');
 
