@@ -11,8 +11,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->redirectUsersTo(fn(Request $request) => route('web.hub.home'));
-        $middleware->redirectGuestsTo(fn(Request $request) => route('web.hub.auth.login'));
+        $middleware->redirectUsersTo(fn (Request $request) => route('web.hub.home'));
+        $middleware->redirectGuestsTo(fn (Request $request) => route('web.hub.auth.login'));
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

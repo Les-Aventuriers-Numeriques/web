@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\Auth as AuthService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as AuthFacade;
 
 class Auth extends Controller
@@ -67,7 +67,7 @@ class Auth extends Controller
             }
 
             $user = new User;
-            $user->id = $discordUser->getId();
+            $user->id = (int) $discordUser->getId();
         }
 
         $userInfo = data_get($membershipInfo, 'user');
