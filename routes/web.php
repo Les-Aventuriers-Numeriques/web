@@ -7,10 +7,9 @@ use App\Http\Controllers\Site\Lan;
 use Illuminate\Support\Facades\Route;
 
 $domainName = config('team-lan.domain_name');
-$hubSubdomainName = config('team-lan.hub_subdomain_name');
 
 Route::name('web.')
-    ->group(function () use ($hubSubdomainName, $domainName) {
+    ->group(function () use ($domainName) {
         Route::domain($domainName)
             ->name('site.')
             ->withoutMiddleware('web')
@@ -19,7 +18,7 @@ Route::name('web.')
                 Route::get('lan', Lan::class)->name('lan');
             });
 
-        Route::domain("$hubSubdomainName.$domainName")
+        Route::domain("hub.$domainName")
             ->name('hub.')
             ->group(function () {
                 Route::get('', HubHome::class)->name('home');
