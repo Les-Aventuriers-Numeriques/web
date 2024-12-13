@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth as AuthFacade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
+use SocialiteProviders\Discord\Provider;
 
 class Auth extends Controller
 {
@@ -34,14 +35,20 @@ class Auth extends Controller
 
     public function redirect(): RedirectResponse
     {
-        return Socialite::driver('discord')
+        /** @var Provider $driver */
+        $driver = Socialite::driver('discord');
+
+        return $driver
             ->scopes(Config::array('services.discord.scopes'))
             ->redirect();
     }
 
     public function callback(): RedirectResponse
     {
-        $discordUser = Socialite::driver('discord')->user();
+        /** @var Provider $driver */
+        $driver = Socialite::driver('discord');
+
+        $discordUser = $driver->user();
         $guildId = Config::integer('services.discord.guild_id');
         $user = User::find($discordUser->getId());
         $isNewUser = ! $user instanceof User;
@@ -84,9 +91,7 @@ class Auth extends Controller
 
         $userInfo = data_get($membershipInfo, 'user');
 
-        $user->display_name = data_get($membershipInfo, 'nick')
-            ?? data_get($userInfo, 'global_name')
-            ?? data_get($userInfo, 'username');
+        $user->display_name = data_get($membershipInfo, 'nick') ?? $discordUser->getNickname();
 
         $memberAvatarHash = data_get($membershipInfo, 'avatar');
         $userAvatarHash = data_get($userInfo, 'avatar');
@@ -96,7 +101,7 @@ class Auth extends Controller
 
             $user->avatar_url = "https://cdn.discordapp.com/guilds/$guildId/users/{$discordUser->getId()}/avatars/$memberAvatarHash.png";
         } elseif ($userAvatarHash) {
-            $user->avatar_url = "https://cdn.discordapp.com/avatars/{$discordUser->getId()}/$userAvatarHash.png";
+            $user->avatar_url = $discordUser->getAvatar();
         }
 
         $user->is_member = $isMember;

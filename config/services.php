@@ -45,10 +45,10 @@ return [
 
         'scopes' => ['guilds.members.read'],
 
-        'guild_id' => env('DISCORD_GUILD_ID'),
+        'guild_id' => (int) env('DISCORD_GUILD_ID'),
 
-        'member_role_id' => env('DISCORD_MEMBER_ROLE_ID'),
-        'lan_participant_role_id' => env('DISCORD_LAN_PARTICIPANT_ROLE_ID'),
-        'admin_role_id' => env('DISCORD_ADMIN_ROLE_ID'),
+        'member_role_id' => (int) env('DISCORD_MEMBER_ROLE_ID'),
+        'lan_participant_role_id' => (int) env('DISCORD_LAN_PARTICIPANT_ROLE_ID'),
+        'admin_role_id' => (int) env('DISCORD_ADMIN_ROLE_ID'),
     ],
 ];
