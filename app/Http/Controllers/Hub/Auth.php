@@ -43,6 +43,8 @@ class Auth extends Controller
     {
         $discordUser = Socialite::driver('discord')->user();
         $guildId = Config::integer('services.discord.guild_id');
+        $user = User::find($discordUser->getId());
+        $isNewUser = ! $user instanceof User;
 
         $membershipInfoResponse = Http::baseUrl('https://discord.com/api')
             ->acceptJson()
@@ -51,6 +53,12 @@ class Auth extends Controller
             ->get("/users/@me/guilds/$guildId/member");
 
         if (! $membershipInfoResponse->ok()) {
+            if (! $isNewUser) {
+                $user->is_member = $user->is_lan_participant = $user->is_admin = false;
+
+                $user->save();
+            }
+
             return to_route('web.hub.auth.login')
                 ->with('warning', 'Tu n\'est pas présent sur notre serveur Discord.');
         }
@@ -63,9 +71,6 @@ class Auth extends Controller
         $isLanParticipant = in_array(Config::integer('services.discord.member_role_id'), $roles);
         $isAdmin = in_array(Config::integer('services.discord.member_role_id'), $roles);
         $hasAnyRole = $isMember || $isLanParticipant || $isAdmin;
-
-        $user = User::find($discordUser->getId());
-        $isNewUser = ! $user instanceof User;
 
         if ($isNewUser) {
             if (! $hasAnyRole) {
