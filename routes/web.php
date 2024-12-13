@@ -1,43 +1,18 @@
 <?php
 
-use App\Http\Controllers\Hub\Auth;
-use App\Http\Controllers\Hub\Home as HubHome;
-use App\Http\Controllers\Site\Home as SiteHome;
-use App\Http\Controllers\Site\Lan;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Config;
 
-$domainName = config('team-lan.domain_name');
+$domainName = Config::string('team-lan.domain_name');
 
 Route::name('web.')
     ->group(function () use ($domainName) {
         Route::name('site.')
             ->domain($domainName)
             ->withoutMiddleware('web')
-            ->group(function () {
-                Route::get('', SiteHome::class)->name('home');
-                Route::get('lan', Lan::class)->name('lan');
-            });
+            ->group(base_path('routes/site.php'));
 
         Route::name('hub.')
             ->domain("hub.$domainName")
-            ->group(function () {
-                Route::get('', HubHome::class)
-                    ->middleware('auth')
-                    ->name('home');
-
-                Route::name('auth.')
-                    ->group(function () {
-                        Route::get('deconnexion', [Auth::class, 'logout'])
-                            ->middleware('auth')
-                            ->name('logout');
-
-                        Route::prefix('connexion')
-                            ->middleware('guest')
-                            ->group(function () {
-                                Route::get('', [Auth::class, 'login'])->name('login');
-                                Route::get('redirect', [Auth::class, 'redirect'])->name('redirect');
-                                Route::get('callback', [Auth::class, 'callback'])->name('callback');
-                            });
-                    });
-            });
+            ->group(base_path('routes/hub.php'));
     });

@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as AuthFacade;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -20,7 +21,7 @@ class Auth extends Controller
 
     public function logout(Request $request): RedirectResponse
     {
-        $username = AuthFacade::user()->display_name;
+        $username = AuthFacade::user()?->display_name;
 
         AuthFacade::logout();
 
@@ -34,19 +35,20 @@ class Auth extends Controller
     public function redirect(): RedirectResponse
     {
         return Socialite::driver('discord')
-            ->scopes(config('services.discord.scopes'))
+            ->scopes(Config::array('services.discord.scopes'))
             ->redirect();
     }
 
     public function callback(): RedirectResponse
     {
         $discordUser = Socialite::driver('discord')->user();
-        $guildId = config('services.discord.guild_id');
+        $guildId = Config::integer('services.discord.guild_id');
 
-        $membershipInfoResponse = Http::acceptJson()
+        $membershipInfoResponse = Http::baseUrl('https://discord.com/api')
+            ->acceptJson()
             ->asJson()
             ->withToken($discordUser->token)
-            ->get("https://discord.com/api/users/@me/guilds/$guildId/member");
+            ->get("/users/@me/guilds/$guildId/member");
 
         if (! $membershipInfoResponse->ok()) {
             return to_route('web.hub.auth.login')
@@ -57,9 +59,9 @@ class Auth extends Controller
 
         $roles = data_get($membershipInfo, 'roles', []);
 
-        $isMember = in_array(config('services.discord.member_role_id'), $roles);
-        $isLanParticipant = in_array(config('services.discord.member_role_id'), $roles);
-        $isAdmin = in_array(config('services.discord.member_role_id'), $roles);
+        $isMember = in_array(Config::integer('services.discord.member_role_id'), $roles);
+        $isLanParticipant = in_array(Config::integer('services.discord.member_role_id'), $roles);
+        $isAdmin = in_array(Config::integer('services.discord.member_role_id'), $roles);
         $hasAnyRole = $isMember || $isLanParticipant || $isAdmin;
 
         $user = User::find($discordUser->getId());
@@ -85,7 +87,7 @@ class Auth extends Controller
         $userAvatarHash = data_get($userInfo, 'avatar');
 
         if ($memberAvatarHash) {
-            $guildId = config('services.discord.guild_id');
+            $guildId = Config::integer('services.discord.guild_id');
 
             $user->avatar_url = "https://cdn.discordapp.com/guilds/$guildId/users/{$discordUser->getId()}/avatars/$memberAvatarHash.png";
         } elseif ($userAvatarHash) {
