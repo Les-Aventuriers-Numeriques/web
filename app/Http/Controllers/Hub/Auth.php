@@ -4,16 +4,15 @@ namespace App\Http\Controllers\Hub;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Services\Auth as AuthService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as AuthFacade;
+use Illuminate\Support\Facades\Http;
+use Laravel\Socialite\Facades\Socialite;
 
 class Auth extends Controller
 {
-    public function __construct(private AuthService $auth) {}
-
     public function login(): View
     {
         return view('hub.login');
@@ -34,14 +33,20 @@ class Auth extends Controller
 
     public function redirect(): RedirectResponse
     {
-        return $this->auth->redirect();
+        return Socialite::driver('discord')
+            ->scopes(config('services.discord.scopes'))
+            ->redirect();
     }
 
     public function callback(): RedirectResponse
     {
-        $discordUser = $this->auth->discordUser();
+        $discordUser = Socialite::driver('discord')->user();
+        $guildId = config('services.discord.guild_id');
 
-        $membershipInfoResponse = $this->auth->membershipInfo($discordUser);
+        $membershipInfoResponse = Http::acceptJson()
+            ->asJson()
+            ->withToken($discordUser->token)
+            ->get("https://discord.com/api/users/@me/guilds/$guildId/member");
 
         if (! $membershipInfoResponse->ok()) {
             return to_route('web.hub.auth.login')
