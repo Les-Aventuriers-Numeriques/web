@@ -61,9 +61,9 @@ class Auth extends Controller
 
         if (! $membershipInfoResponse->ok()) {
             if (! $isNewUser) {
-                $user->is_member = $user->is_lan_participant = $user->is_admin = false;
-
-                $user->save();
+                $user
+                    ->resetRoles()
+                    ->save();
             }
 
             return to_route('web.hub.auth.login')
@@ -72,15 +72,15 @@ class Auth extends Controller
 
         $membershipInfo = $membershipInfoResponse->object();
 
-        $roles = data_get($membershipInfo, 'roles', []);
+        if (! $membershipInfo) {
+            return to_route('web.hub.auth.login')
+                ->with('error', 'Réponse invalide.');
+        }
 
-        $isMember = in_array(Config::integer('services.discord.member_role_id'), $roles);
-        $isLanParticipant = in_array(Config::integer('services.discord.member_role_id'), $roles);
-        $isAdmin = in_array(Config::integer('services.discord.member_role_id'), $roles);
-        $hasAnyRole = $isMember || $isLanParticipant || $isAdmin;
+        $roles = User::determineRoles($membershipInfo);
 
         if ($isNewUser) {
-            if (! $hasAnyRole) {
+            if (! data_get($roles, 'hasAnyRole', false)) {
                 return to_route('web.hub.auth.login')
                     ->with('warning', 'Tu n\'as pas l\'autorisation d\'accéder à notre intranet.');
             }
@@ -89,29 +89,11 @@ class Auth extends Controller
             $user->id = (int) $discordUser->getId();
         }
 
-        $userInfo = data_get($membershipInfo, 'user');
+        $user
+            ->syncWithDiscord($discordUser, $membershipInfo, $roles)
+            ->save();
 
-        $user->display_name = data_get($membershipInfo, 'nick') ?? $discordUser->getNickname();
-
-        $memberAvatarHash = data_get($membershipInfo, 'avatar');
-        $userAvatarHash = data_get($userInfo, 'avatar');
-
-        if ($memberAvatarHash) {
-            $guildId = Config::integer('services.discord.guild_id');
-
-            $user->avatar_url = "https://cdn.discordapp.com/guilds/$guildId/users/{$discordUser->getId()}/avatars/$memberAvatarHash.png";
-        } elseif ($userAvatarHash) {
-            $user->avatar_url = $discordUser->getAvatar();
-        }
-
-        $user->is_member = $isMember;
-        $user->is_lan_participant = $isLanParticipant;
-        $user->is_admin = $isAdmin;
-        $user->must_relogin = false;
-
-        $user->save();
-
-        if (! $hasAnyRole) {
+        if (! data_get($roles, 'hasAnyRole', false)) {
             return to_route('web.hub.auth.login')
                 ->with('warning', 'Désolé, tu n\'as plus l\'autorisation d\'accéder à notre intranet.');
         }
