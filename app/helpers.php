@@ -1,7 +1,7 @@
 <?php
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
 
 if (! function_exists('to_hub_route')) {
     function to_hub_route(string $route, ...$args): RedirectResponse

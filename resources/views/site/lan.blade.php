@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>LAN</title>
-</head>
-<body>
+@extends('layout')
+
+@section('content')
     <p>LAN</p>
-</body>
-</html>
+@endsection
