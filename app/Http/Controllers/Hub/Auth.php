@@ -2,34 +2,35 @@
 
 namespace App\Http\Controllers\Hub;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth as AuthFacade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\InvalidStateException;
 use SocialiteProviders\Discord\Provider;
 
 class Auth extends Controller
 {
     public function login(): View
     {
-        return view('hub.login');
+        return hub_view('login');
     }
 
     public function logout(Request $request): RedirectResponse
     {
-        $username = AuthFacade::user()?->display_name;
+        $user = $request->user();
+        $username = '';
 
-        AuthFacade::logout();
+        if ($user) {
+            $username = $user->display_name;
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+            $user->logout();
+        }
 
-        return to_route('web.hub.auth.login')
+        return to_hub_route('auth.login')
             ->with('success', "À plus $username !");
     }
 
@@ -48,7 +49,13 @@ class Auth extends Controller
         /** @var Provider $driver */
         $driver = Socialite::driver('discord');
 
-        $discordUser = $driver->user();
+        try {
+            $discordUser = $driver->user();
+        } catch (InvalidStateException $e) {
+            return to_hub_route('auth.login')
+                ->with('error', "Erreur lors de la connexion avec Discord ({$e->getMessage()}). Rééssaye de zéro STP.");
+        }
+
         $guildId = Config::integer('services.discord.guild_id');
         $user = User::find($discordUser->getId());
         $isNewUser = ! $user instanceof User;
@@ -66,14 +73,14 @@ class Auth extends Controller
                     ->save();
             }
 
-            return to_route('web.hub.auth.login')
+            return to_hub_route('auth.login')
                 ->with('warning', 'Tu n\'est pas présent sur notre serveur Discord.');
         }
 
         $membershipInfo = $membershipInfoResponse->object();
 
         if (! $membershipInfo) {
-            return to_route('web.hub.auth.login')
+            return to_hub_route('auth.login')
                 ->with('error', 'Réponse invalide.');
         }
 
@@ -81,26 +88,25 @@ class Auth extends Controller
 
         if ($isNewUser) {
             if (! data_get($roles, 'hasAnyRole', false)) {
-                return to_route('web.hub.auth.login')
+                return to_hub_route('auth.login')
                     ->with('warning', 'Tu n\'as pas l\'autorisation d\'accéder à notre intranet.');
             }
 
-            $user = new User;
-            $user->id = (int) $discordUser->getId();
+            $user = User::createFromDiscord($discordUser);
         }
 
         $user
-            ->syncWithDiscord($discordUser, $membershipInfo, $roles)
+            ->updateFromDiscord($discordUser, $membershipInfo, $roles)
             ->save();
 
         if (! data_get($roles, 'hasAnyRole', false)) {
-            return to_route('web.hub.auth.login')
+            return to_hub_route('auth.login')
                 ->with('warning', 'Désolé, tu n\'as plus l\'autorisation d\'accéder à notre intranet.');
         }
 
-        AuthFacade::login($user);
+        $user->login();
 
-        return to_route('web.hub.home')
+        return to_hub_route('home')
             ->with('success', sprintf("%s $user->display_name !", $isNewUser ? 'Bienvenue' : 'Content de te revoir'));
     }
 }
