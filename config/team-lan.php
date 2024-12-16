@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'domain_name' => env('DOMAIN_NAME'),
+    'domain' => env('APP_DOMAIN'),
 ];

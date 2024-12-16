@@ -3,16 +3,16 @@
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
-$domainName = Config::string('team-lan.domain_name');
+$domain = Config::string('team-lan.domain');
 
 Route::name('web.')
-    ->group(function () use ($domainName) {
+    ->group(function () use ($domain) {
         Route::name('site.')
-            ->domain($domainName)
+            ->domain($domain)
             ->withoutMiddleware('web')
             ->group(base_path('routes/site.php'));
 
         Route::name('hub.')
-            ->domain("hub.$domainName")
+            ->domain("hub.$domain")
             ->group(base_path('routes/hub.php'));
     });
