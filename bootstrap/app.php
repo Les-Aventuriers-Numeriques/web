@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\LogoutUserIfMustRelogin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->redirectUsersTo(fn (Request $request) => route('web.hub.home'));
         $middleware->redirectGuestsTo(fn (Request $request) => route('web.hub.auth.login'));
+
+        $middleware->alias([
+            'logout_if_must_relogin' => LogoutUserIfMustRelogin::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

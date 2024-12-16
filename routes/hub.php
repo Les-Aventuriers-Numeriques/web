@@ -3,9 +3,10 @@
 use App\Http\Controllers\Hub\Auth;
 use App\Http\Controllers\Hub\Home;
 
-Route::get('', Home::class)
-    ->middleware('auth')
-    ->name('home');
+Route::middleware(['auth', 'logout_if_must_relogin'])
+    ->group(function () {
+        Route::get('', Home::class)->name('home');
+    });
 
 Route::name('auth.')
     ->group(function () {
