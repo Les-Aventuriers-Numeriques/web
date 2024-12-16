@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "784e9d21688ecba3a672a76030290d27",
+    "content-hash": "c10c5419b3c229ebbbd5810df77c7ed5",
     "packages": [
         {
             "name": "artesaos/seotools",
@@ -6846,64 +6846,6 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.2.7"
             },
             "time": "2023-12-08T13:03:43+00:00"
-        },
-        {
-            "name": "verschuur/laravel-robotstxt",
-            "version": "5.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/verschuur/laravel-robotstxt.git",
-                "reference": "d2a63f00a58c3de478518e2a59833b0526c15498"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/verschuur/laravel-robotstxt/zipball/d2a63f00a58c3de478518e2a59833b0526c15498",
-                "reference": "d2a63f00a58c3de478518e2a59833b0526c15498",
-                "shasum": ""
-            },
-            "require": {
-                "laravel/framework": "^9.0|^10.0|^11.0",
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^7.0|^8.0|^9.0",
-                "phpstan/phpstan": "^1.4",
-                "phpunit/phpunit": "^9.0|^10.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Verschuur\\Laravel\\RobotsTxt\\Providers\\RobotsTxtProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Verschuur\\Laravel\\RobotsTxt\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Govert Verschuur",
-                    "email": "govert.verschuur@gmail.com"
-                }
-            ],
-            "description": "Set the robots.txt content dynamically based on the Laravel app environment.",
-            "keywords": [
-                "laravel",
-                "php",
-                "robots.txt"
-            ],
-            "support": {
-                "issues": "https://github.com/verschuur/laravel-robotstxt/issues",
-                "source": "https://github.com/verschuur/laravel-robotstxt/tree/5.1.0"
-            },
-            "time": "2024-09-10T19:00:10+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
