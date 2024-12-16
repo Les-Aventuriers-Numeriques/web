@@ -6,6 +6,7 @@
 
 $defaultTitle = 'Les Aventuriers Numériques';
 $defaultDescription = 'Une team multigaming francophone et conviviale';
+$defaultImage = asset('images/logo_256.png');
 
 return [
     'meta' => [
@@ -15,7 +16,7 @@ return [
         'defaults' => [
             'title' => $defaultTitle, // set false to total remove
             'titleBefore' => false, // Put defaults.title before page title, like 'It's Over 9000! - Dashboard'
-            'description' => 'Une team multigaming francophone et conviviale', // set false to total remove
+            'description' => $defaultDescription, // set false to total remove
             'separator' => ' • ',
             'keywords' => [],
             'canonical' => 'current', // Set to null or 'full' to use Url::full(), set to 'current' to use Url::current(), set false to total remove
@@ -45,7 +46,7 @@ return [
             'url' => null, // Set null for using Url::current(), set false to total remove
             'type' => 'website',
             'site_name' => $defaultTitle,
-            'images' => [],
+            'images' => [$defaultImage],
         ],
     ],
     'twitter' => [
@@ -66,7 +67,7 @@ return [
             'description' => $defaultDescription, // set false to total remove
             'url' => 'current', // Set to null or 'full' to use Url::full(), set to 'current' to use Url::current(), set false to total remove
             'type' => 'WebPage',
-            'images' => [],
+            'images' => [$defaultImage],
         ],
     ],
 ];

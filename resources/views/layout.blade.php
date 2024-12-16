@@ -8,7 +8,7 @@
 
     {!! SEO::generate() !!}
 
-    <link rel="icon" href="/favicon.ico" sizes="32x32 48x48">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="32x32 48x48">
 
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
