@@ -6,7 +6,7 @@
 
 $defaultTitle = 'Les Aventuriers Numériques';
 $defaultDescription = 'Une team multigaming francophone et conviviale';
-$defaultImage = asset('images/logo_256.png');
+$defaultImage = '/images/logo_256.png';
 
 return [
     'meta' => [
