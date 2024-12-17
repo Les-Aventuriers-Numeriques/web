@@ -16,7 +16,8 @@
         "laravel/tinker": "^2.9",
         "nwilging/laravel-discord-bot": "^1.1",
         "socialiteproviders/discord": "^4.2",
-        "spatie/laravel-sitemap": "^7.3"
+        "spatie/laravel-sitemap": "^7.3",
+        "ext-dom": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

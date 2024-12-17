@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\Hub\Auth;
 use App\Http\Controllers\Hub\Home;
+use App\Http\Controllers\Hub\RobotsTxt;
+
+Route::withoutMiddleware('web')
+    ->get('robots.txt', RobotsTxt::class)->name('robots-txt');
 
 Route::middleware(['auth', 'logout_if_must_relogin'])
     ->group(function () {
