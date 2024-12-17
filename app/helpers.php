@@ -4,36 +4,36 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
 if (! function_exists('to_hub_route')) {
-    function to_hub_route(string $route, ...$args): RedirectResponse
+    function to_hub_route(string $route, array $parameters = [], int $status = 302, array $headers = []): RedirectResponse
     {
-        return to_route("web.hub.$route", ...$args);
+        return to_route("web.hub.$route", $parameters, $status, $headers);
     }
 }
 
 if (! function_exists('hub_view')) {
-    function hub_view(string $view, ...$args): View
+    function hub_view(string $view, array $data = [], array $mergeData = []): View
     {
-        return view("hub.$view", ...$args);
+        return view("hub.$view", $data, $mergeData);
     }
 }
 
 if (! function_exists('hub_route')) {
-    function hub_route(string $name, ...$args): string
+    function hub_route(string $name, array $parameters = [], bool $absolute = true): string
     {
-        return route("web.hub.$name", ...$args);
+        return route("web.hub.$name", $parameters, $absolute);
     }
 }
 
 if (! function_exists('site_view')) {
-    function site_view(string $view, ...$args): View
+    function site_view(string $view, array $data = [], array $mergeData = []): View
     {
-        return view("site.$view", ...$args);
+        return view("site.$view", $data, $mergeData);
     }
 }
 
 if (! function_exists('site_route')) {
-    function site_route(string $name, ...$args): string
+    function site_route(string $name, array $parameters = [], bool $absolute = true): string
     {
-        return route("web.site.$name", ...$args);
+        return route("web.site.$name", $parameters, $absolute);
     }
 }

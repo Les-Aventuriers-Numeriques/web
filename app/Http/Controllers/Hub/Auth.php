@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth as AuthFacade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
@@ -27,7 +28,10 @@ class Auth extends Controller
         if ($user) {
             $username = $user->display_name;
 
-            $user->logout();
+            AuthFacade::logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         }
 
         return to_hub_route('auth.login')
@@ -92,7 +96,7 @@ class Auth extends Controller
                     ->with('warning', 'Tu n\'as pas l\'autorisation d\'accéder à notre intranet.');
             }
 
-            $user = User::createFromDiscord($discordUser);
+            $user = User::makeFromDiscord($discordUser);
         }
 
         $user
@@ -104,7 +108,7 @@ class Auth extends Controller
                 ->with('warning', 'Désolé, tu n\'as plus l\'autorisation d\'accéder à notre intranet.');
         }
 
-        $user->login();
+        AuthFacade::login($user);
 
         return to_hub_route('home')
             ->with('success', sprintf("%s $user->display_name !", $isNewUser ? 'Bienvenue' : 'Content de te revoir'));

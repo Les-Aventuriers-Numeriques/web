@@ -47,8 +47,10 @@ return [
 
         'guild_id' => (int) env('DISCORD_GUILD_ID'),
 
-        'member_role_id' => (int) env('DISCORD_MEMBER_ROLE_ID'),
-        'lan_participant_role_id' => (int) env('DISCORD_LAN_PARTICIPANT_ROLE_ID'),
-        'admin_role_id' => (int) env('DISCORD_ADMIN_ROLE_ID'),
+        'roles_id' => [
+            'member' => (int) env('DISCORD_ROLES_ID_MEMBER'),
+            'lan_participant' => (int) env('DISCORD_ROLES_ID_LAN_PARTICIPANT'),
+            'admin' => (int) env('DISCORD_ROLES_ID_ADMIN'),
+        ],
     ],
 ];

@@ -3,7 +3,6 @@
 /**
  * @see https://github.com/artesaos/seotools
  */
-
 $defaultTitle = 'Les Aventuriers Numériques';
 $defaultDescription = 'Une team multigaming francophone et conviviale';
 $defaultImage = '/images/logo_256.png';

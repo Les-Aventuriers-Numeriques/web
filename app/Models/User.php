@@ -5,9 +5,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Request;
 use Laravel\Socialite\Two\User as DiscordUser;
 
 class User extends Authenticatable
@@ -86,20 +84,7 @@ class User extends Authenticatable
         return $this;
     }
 
-    public function login(): void
-    {
-        Auth::login($this);
-    }
-
-    public function logout(): void
-    {
-        Auth::logout();
-
-        Request::session()->invalidate();
-        Request::session()->regenerateToken();
-    }
-
-    public static function createFromDiscord(DiscordUser $discordUser): self
+    public static function makeFromDiscord(DiscordUser $discordUser): static
     {
         return static::make([
             'id' => $discordUser->getId(),
@@ -110,9 +95,9 @@ class User extends Authenticatable
     {
         $roles = data_get($membershipInfo, 'roles', []);
 
-        $isMember = in_array(Config::integer('services.discord.member_role_id'), $roles);
-        $isLanParticipant = in_array(Config::integer('services.discord.member_role_id'), $roles);
-        $isAdmin = in_array(Config::integer('services.discord.member_role_id'), $roles);
+        $isMember = in_array(Config::integer('services.discord.roles_id.member'), $roles);
+        $isLanParticipant = in_array(Config::integer('services.discord.roles_id.lan_participant'), $roles);
+        $isAdmin = in_array(Config::integer('services.discord.roles_id.admin'), $roles);
         $hasAnyRole = $isMember || $isLanParticipant || $isAdmin;
 
         return (object) compact('isMember', 'isLanParticipant', 'isAdmin', 'hasAnyRole');

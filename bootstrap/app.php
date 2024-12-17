@@ -12,13 +12,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->redirectUsersTo(fn (Request $request) => route('web.hub.home'));
-        $middleware->redirectGuestsTo(fn (Request $request) => route('web.hub.auth.login'));
+        $middleware->redirectUsersTo(fn (Request $request): string => hub_route('home'));
+        $middleware->redirectGuestsTo(function (Request $request): string {
+            $request->session()->flash('warning', 'Merci de te connecter afin d\'accéder à cette page, on se revoit ensuite.');
+
+            return hub_route('auth.login');
+        });
 
         $middleware->alias([
             'logout_if_must_relogin' => LogoutUserIfMustRelogin::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->dontTruncateRequestExceptions();
     })->create();
