@@ -10,16 +10,18 @@ class SitemapXml extends Controller
     public function __invoke(): Response
     {
         $sitemap = XMLDocument::createEmpty();
+        $sitemap->formatOutput = app()->hasDebugModeEnabled();
+        $urlsetns = 'http://www.sitemaps.org/schemas/sitemap/0.9';
 
         $root = $sitemap->appendChild(
-            $sitemap->createElementNS('http://www.sitemaps.org/schemas/sitemap/0.9', 'urlset')
+            $sitemap->createElementNS($urlsetns, 'urlset')
         );
 
         foreach (['home', 'lan'] as $route) {
-            $loc = $sitemap->createElement('loc');
+            $loc = $sitemap->createElementNS($urlsetns, 'loc');
             $loc->textContent = site_route($route);
 
-            $url = $sitemap->createElement('url');
+            $url = $sitemap->createElementNS($urlsetns, 'url');
 
             $url->appendChild($loc);
             $root->appendChild($url);
