@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller as BaseController;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Support\Facades\URL;
 
-abstract class Controller extends BaseController {
+abstract class Controller extends BaseController
+{
     public function __construct()
     {
         // Global
@@ -21,9 +22,15 @@ abstract class Controller extends BaseController {
             ->setUrl(URL::current())
             ->addProperty('locale', app()->getLocale());
 
+        // Twitter Card
+        SEOTools::twitter()
+            ->setType('summary');
+
         // JSON-LD
         SEOTools::jsonLd()
             ->setType('WebPage')
             ->setUrl(URL::current());
+
+        // TODO JSON-LD de base
     }
 }

@@ -14,15 +14,18 @@ Route::middleware(['auth', 'logout_if_must_relogin'])
 
 Route::name('auth.')
     ->group(function () {
-        Route::get('deconnexion', [Auth::class, 'logout'])
-            ->middleware('auth')
-            ->name('logout');
-
-        Route::prefix('connexion')
-            ->middleware('guest')
+        Route::controller(Auth::class)
             ->group(function () {
-                Route::get('', [Auth::class, 'login'])->name('login');
-                Route::get('redirect', [Auth::class, 'redirect'])->name('redirect');
-                Route::get('callback', [Auth::class, 'callback'])->name('callback');
+                Route::get('deconnexion', 'logout')
+                    ->middleware('auth')
+                    ->name('logout');
+
+                Route::prefix('connexion')
+                    ->middleware('guest')
+                    ->group(function () {
+                        Route::get('', 'login')->name('login');
+                        Route::get('redirect', 'redirect')->name('redirect');
+                        Route::get('callback', 'callback')->name('callback');
+                    });
             });
     });

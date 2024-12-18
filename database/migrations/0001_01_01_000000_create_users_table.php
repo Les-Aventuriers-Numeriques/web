@@ -16,6 +16,7 @@ return new class extends Migration
             $table->boolean('is_lan_participant')->default(false);
             $table->boolean('is_admin')->default(false);
             $table->boolean('must_relogin')->default(false);
+            $table->rememberToken();
             $table->timestamps();
         });
     }

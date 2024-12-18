@@ -9,8 +9,12 @@ class Home extends Controller
 {
     public function __invoke(): View
     {
+        // Global
         SEOTools::setTitle('En quelques mots');
         SEOTools::setDescription('La team multigaming Les Aventuriers Numériques présentée en quelques mots.');
+
+        // JSON-LD
+        // TODO
 
         return site_view('home');
     }

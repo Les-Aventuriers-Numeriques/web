@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Hub;
 
 use App\Models\User;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,8 @@ class Auth extends Controller
 {
     public function login(): View
     {
+        SEOMeta::setTitle('Connexion');
+
         return hub_view('login');
     }
 
@@ -108,7 +111,7 @@ class Auth extends Controller
                 ->with('warning', 'Désolé, tu n\'as plus l\'autorisation d\'accéder à notre intranet.');
         }
 
-        AuthFacade::login($user);
+        AuthFacade::login($user, true);
 
         return to_hub_route('home')
             ->with('success', sprintf("%s $user->display_name !", $isNewUser ? 'Bienvenue' : 'Content de te revoir'));
