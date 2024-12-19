@@ -30,7 +30,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
+        'remember_token',
     ];
 
     /**
@@ -91,7 +91,7 @@ class User extends Authenticatable
         return $this;
     }
 
-    public static function makeFromDiscord(DiscordUser $discordUser): static
+    public static function makeFromDiscord(DiscordUser $discordUser): self
     {
         return static::make([
             'id' => $discordUser->getId(),

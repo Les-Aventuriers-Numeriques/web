@@ -17,7 +17,7 @@ class LogoutUserIfMustRelogin
         $user = Auth::user();
 
         if ($user && $user->must_relogin) {
-            $user->logout();
+            Auth::logout();
 
             return to_route('web.hub.auth.login')
                 ->with('success', 'Merci de te reconnecter.');

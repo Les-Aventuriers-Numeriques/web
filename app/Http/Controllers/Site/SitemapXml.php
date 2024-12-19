@@ -28,8 +28,16 @@ class SitemapXml extends Controller
             $root->appendChild($url);
         }
 
+        $content = $sitemap->saveXml();
+
+        if (!$content) {
+            report('Génération du sitemap échouée');
+
+            abort(500);
+        }
+
         return response(
-            $sitemap->saveXml()
+            $content
         )->header('Content-Type', 'application/xml');
     }
 }
