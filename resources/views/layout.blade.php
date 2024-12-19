@@ -18,6 +18,8 @@
     </header>
 
     <main>
+        <h1>{{ SEO::getTitle(true) }}</h1>
+
         @yield('content')
     </main>
 
