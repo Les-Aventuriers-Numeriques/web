@@ -20,7 +20,7 @@ class LogoutUserIfMustRelogin
             Auth::logout();
 
             return to_route('web.hub.auth.login')
-                ->with('success', 'Merci de te reconnecter.');
+                ->withAlert('Merci de te reconnecter.', 'warning');
         }
 
         return $next($request);

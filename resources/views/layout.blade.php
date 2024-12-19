@@ -20,6 +20,12 @@
     <main>
         <h1>{{ SEO::getTitle(true) }}</h1>
 
+        @session('alert-type')
+            <div class="alert alert-{{ $value }}" role="alert">
+                {!! session()->get('alert-message') !!}
+            </div>
+        @endsession
+
         @yield('content')
     </main>
 
