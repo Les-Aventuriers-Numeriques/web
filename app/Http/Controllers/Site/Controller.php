@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller as BaseController;
 use Artesaos\SEOTools\Facades\SEOTools;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\URL;
 
 abstract class Controller extends BaseController
@@ -14,6 +15,10 @@ abstract class Controller extends BaseController
         SEOTools::setDescription('Une team multigaming francophone et conviviale');
         SEOTools::setCanonical(URL::current());
         SEOTools::addImages(asset('images/logo_256.png'));
+
+        // Tags meta
+        SEOTools::metatags()
+            ->setTitleDefault('Les Aventuriers Numériques');
 
         // Open Graph
         SEOTools::opengraph()
@@ -27,10 +32,24 @@ abstract class Controller extends BaseController
             ->setType('summary');
 
         // JSON-LD
-        SEOTools::jsonLd()
+        SEOTools::jsonLdMulti()
             ->setType('WebPage')
-            ->setUrl(URL::current());
+            ->setUrl(URL::current())
+            ->addValue('mainEntity', $this->jsonLdOrg());
+    }
 
-        // TODO JSON-LD de base
+    protected function jsonLdOrg(): array
+    {
+        return [
+            '@type' => 'Organization',
+            'name' => 'Les Aventuriers Numériques',
+            'alternateName' => 'LAN',
+            'description' => 'Une team multigaming francophone et conviviale',
+            'slogan' => 'Une team multigaming francophone et conviviale',
+            'url' => site_route('home'),
+            'image' => asset('images/logo_256.png'),
+            'logo' => asset('images/logo_256.png'),
+            'foundingDate' => Date::createFromDate(2024, 3, 8)->toDateString(),
+        ];
     }
 }

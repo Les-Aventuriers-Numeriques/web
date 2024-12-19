@@ -14,7 +14,9 @@ class Home extends Controller
         SEOTools::setDescription('La team multigaming Les Aventuriers Numériques présentée en quelques mots.');
 
         // JSON-LD
-        // TODO
+        SEOTools::jsonLdMulti()
+            ->setType('AboutPage')
+            ->addValue('about', $this->jsonLdOrg());
 
         return site_view('home');
     }

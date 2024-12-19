@@ -14,7 +14,10 @@ class Lan extends Controller
         SEOTools::setDescription('Infos à propos de la LAN annuelle organisée par la team Les Aventuriers Numériques.');
 
         // JSON-LD
-        // TODO
+        SEOTools::jsonLdMulti()
+            ->addValue('about', [
+                '@type' => 'SocialEvent',
+            ]);
 
         return site_view('lan');
     }

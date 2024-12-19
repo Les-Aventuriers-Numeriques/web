@@ -9,6 +9,7 @@ abstract class Controller extends BaseController
 {
     public function __construct()
     {
+        SEOMeta::setTitleDefault('Hub Les Aventuriers Numériques');
         SEOMeta::setRobots('noindex, nofollow');
     }
 }

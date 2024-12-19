@@ -30,7 +30,7 @@ class SitemapXml extends Controller
 
         $content = $sitemap->saveXml();
 
-        if (!$content) {
+        if (! $content) {
             report('Génération du sitemap échouée');
 
             abort(500);
