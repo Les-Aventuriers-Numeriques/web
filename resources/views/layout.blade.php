@@ -13,11 +13,11 @@
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-    <header>
+    <header class="container">
 
     </header>
 
-    <main>
+    <main class="container">
         <h1>{{ SEO::getTitle(true) }}</h1>
 
         @session('alert-type')
@@ -29,8 +29,17 @@
         @yield('content')
     </main>
 
-    <footer>
-
+    <footer class="container border-top">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-auto">
+                &copy; {{ $today->year }} <a href="https://epoc.fr"><img src="{{ asset('images/epoc.png') }}" alt="Logo de Maxime &quot;Epoc&quot; Gross" width="24" height="24"></a> <a href="https://epoc.fr/">Maxime "Epoc" Gross</a>
+            </div>
+            <div class="col-auto fs-2">
+                @foreach($socialLinks as $icon => $url)
+                    <a href="{{ $url }}"><i class="bi bi-{{ $icon }}"></i></a>
+                @endforeach
+            </div>
+        </div>
     </footer>
 </body>
 </html>

@@ -7,6 +7,9 @@ use Illuminate\Http\Response;
 
 class SitemapXml extends Controller
 {
+    /**
+     * @ar string
+     */
     private const NS = 'http://www.sitemaps.org/schemas/sitemap/0.9';
 
     public function __invoke(): Response

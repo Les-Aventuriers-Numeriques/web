@@ -1,0 +1,18 @@
+<?php
+
+namespace App\View\Composers;
+
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
+use Illuminate\View\View;
+
+class LayoutViewComposer
+{
+    public function compose(View $view)
+    {
+        $view->with([
+            'today' => Date::now(),
+            'socialLinks' => Config::array('team-lan.social_links'),
+        ]);
+    }
+}
