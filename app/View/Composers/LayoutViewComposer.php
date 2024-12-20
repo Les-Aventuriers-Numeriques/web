@@ -13,6 +13,8 @@ class LayoutViewComposer
         $view->with([
             'today' => Date::now(),
             'socialLinks' => Config::array('team-lan.social_links'),
+            'logo' => asset(Config::string('team-lan.logo')),
+            'teamName' => Config::string('team-lan.team_name'),
         ]);
     }
 }

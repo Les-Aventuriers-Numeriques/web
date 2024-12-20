@@ -14,7 +14,13 @@
 </head>
 <body>
     <header class="container">
-
+        <a href="/">
+            <img src="{{ $logo }}" alt="Logo de la team {{ $teamName }}" width="120" height="120">
+        </a>
+        <div>
+            <a href="{{ $pageTitleUrl }}">{{ $pageTitle }}</a>
+            <div>{{ $pageSubTitle }}</div>
+        </div>
     </header>
 
     <main class="container">
@@ -29,14 +35,14 @@
         @yield('content')
     </main>
 
-    <footer class="container border-top">
-        <div class="row align-items-center justify-content-between">
+    <footer class="container text-body-secondary border-top p-2">
+        <div class="row gap-2 align-items-center justify-content-center justify-content-sm-between">
             <div class="col-auto">
-                &copy; {{ $today->year }} <a href="https://epoc.fr"><img src="{{ asset('images/epoc.png') }}" alt="Logo de Maxime &quot;Epoc&quot; Gross" width="24" height="24"></a> <a href="https://epoc.fr/">Maxime "Epoc" Gross</a>
+                &copy; {{ $today->year }} <a href="https://epoc.fr"><img src="{{ asset('images/epoc.png') }}" alt="Logo de Maxime &quot;Epoc&quot; Gross" width="24" height="24"></a> <a href="https://epoc.fr/" class="link-secondary">Maxime "Epoc" Gross</a>
             </div>
-            <div class="col-auto fs-2">
+            <div class="col-auto fs-2 d-flex flex-row column-gap-3">
                 @foreach($socialLinks as $icon => $url)
-                    <a href="{{ $url }}"><i class="bi bi-{{ $icon }}"></i></a>
+                    <a href="{{ $url }}" class="link-secondary"><i class="bi bi-{{ $icon }}"></i></a>
                 @endforeach
             </div>
         </div>
