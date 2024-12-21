@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
 
-    {!! SEO::generate() !!}
+    {!! SEO::generate(!app()->hasDebugModeEnabled()) !!}
 
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="32x32 48x48">
 

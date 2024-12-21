@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\View\Composers\LayoutViewComposer;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
@@ -53,6 +54,17 @@ class AppServiceProvider extends ServiceProvider
                 'alert-type' => $type,
                 'alert-message' => $message,
             ]);
+        });
+
+        Request::macro('withAlert', function (string $message, string $type): Request {
+            $this->session()->flash('alert-type', $type);
+            $this->session()->flash('alert-message', $message);
+
+            return $this;
+        });
+
+        Carbon::macro('appTz', function (): Carbon {
+            return $this->tz(Config::string('app.timezone_display'));
         });
 
         SEOTools::macro('organizationJsonLd', function (): array {
