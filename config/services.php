@@ -52,5 +52,10 @@ return [
             'lan_participant' => (int) env('DISCORD_ROLES_ID_LAN_PARTICIPANT'),
             'admin' => (int) env('DISCORD_ROLES_ID_ADMIN'),
         ],
+
+        'channels_id' => [
+            'lan' => (int) env('DISCORD_CHANNELS_ID_LAN'),
+            'pubg' => (int) env('DISCORD_CHANNELS_ID_PUBG'),
+        ],
     ],
 ];

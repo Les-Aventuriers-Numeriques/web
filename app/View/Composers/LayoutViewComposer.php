@@ -8,7 +8,7 @@ use Illuminate\View\View;
 
 class LayoutViewComposer
 {
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $view->with([
             'today' => Date::now(),

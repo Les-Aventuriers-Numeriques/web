@@ -49,12 +49,10 @@ class AppServiceProvider extends ServiceProvider
     private function registerMacros(): void
     {
         RedirectResponse::macro('withAlert', function (string $message, string $type): RedirectResponse {
-            $session = $this->getSession();
-
-            $session->flash('alert-type', $type);
-            $session->flash('alert-message', $message);
-
-            return $this;
+            return $this->with([
+                'alert-type' => $type,
+                'alert-message' => $message,
+            ]);
         });
 
         SEOTools::macro('organizationJsonLd', function (): array {

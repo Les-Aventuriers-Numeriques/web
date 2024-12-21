@@ -1,11 +1,15 @@
 <?php
 
 use App\Http\Controllers\Hub\Auth;
+use App\Http\Controllers\Hub\DiscordInteraction;
 use App\Http\Controllers\Hub\Home;
 use App\Http\Controllers\Hub\RobotsTxt;
 
 Route::withoutMiddleware('web')
-    ->get('robots.txt', RobotsTxt::class)->name('robots-txt');
+    ->group(function () {
+        Route::get('robots.txt', RobotsTxt::class)->name('robots-txt');
+        Route::post('discord-interaction', DiscordInteraction::class)->name('discord-interaction');
+    });
 
 Route::middleware(['auth', 'logout_if_must_relogin'])
     ->group(function () {
