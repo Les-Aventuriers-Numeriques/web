@@ -6,7 +6,6 @@ use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\URL;
 
 class Lan extends Controller
@@ -17,11 +16,6 @@ class Lan extends Controller
         $logo = Config::string('team-lan.logo');
         $title = '3ème LAN annuelle';
 
-        // Global
-        SEOTools::setTitle($title);
-        SEOTools::setDescription("Infos à propos de la LAN annuelle organisée par la team $teamName.");
-
-        $today = Date::now();
         $announced = Config::boolean('team-lan.next_lan.announced', false);
 
         /** @var Carbon $startDate */
@@ -36,10 +30,14 @@ class Lan extends Controller
         $locationName = Config::string('team-lan.next_lan.location.name', '');
         $locationUrl = Config::string('team-lan.next_lan.location.url', '');
 
+        // Global
+        SEOTools::setTitle($title);
+        SEOTools::setDescription("Infos à propos de la LAN annuelle organisée par la team $teamName.");
+
         // JSON-LD
         if ($announced) {
             SEOTools::jsonLdMulti()
-                ->addValue('about', [
+                ->addValue('about', array_filter([
                     '@type' => 'SocialEvent',
                     'name' => $title,
                     'description' => $title,
@@ -49,16 +47,16 @@ class Lan extends Controller
                     'organizer' => SEOTools::organizationJsonLd(),
                     'startDate' => $startDate->toDateString(),
                     'endDate' => $endDate->toDateString(),
-                    'location' => [
+                    'location' => $locationName ? [
                         '@type' => 'City',
                         'name' => $locationName,
-                    ],
+                    ] : null,
                     'maximumAttendeeCapacity' => $maxAttendees,
                     'remainingAttendeeCapacity' => $maxAttendees - $currentAttendees,
-                ]);
+                ]));
         }
 
-        return site_view('lan', compact('today', 'announced', 'startDate', 'endDate', 'maxAttendees',
+        return site_view('lan', compact('announced', 'startDate', 'endDate', 'maxAttendees',
             'currentAttendees', 'locationName', 'locationUrl'));
     }
 }
