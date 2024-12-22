@@ -49,16 +49,21 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerMacros(): void
     {
-        RedirectResponse::macro('withAlert', function (string $message, string $type): RedirectResponse {
-            return $this->with([
+        $flashedAlert = function (string $message, string $type): array {
+            return [
                 'alert-type' => $type,
                 'alert-message' => $message,
-            ]);
+            ];
+        };
+
+        RedirectResponse::macro('withAlert', function (string $message, string $type) use ($flashedAlert): RedirectResponse {
+            return $this->with($flashedAlert($message, $type));
         });
 
-        Request::macro('withAlert', function (string $message, string $type): Request {
-            $this->session()->flash('alert-type', $type);
-            $this->session()->flash('alert-message', $message);
+        Request::macro('withAlert', function (string $message, string $type) use ($flashedAlert): Request {
+            foreach ($flashedAlert($message, $type) as $key => $value) {
+                $this->session()->flash($key, $value);
+            }
 
             return $this;
         });

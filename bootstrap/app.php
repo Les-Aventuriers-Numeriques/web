@@ -9,8 +9,7 @@ use Sentry\Laravel\Integration;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        health: '/up',
+        web: __DIR__.'/../routes/web.php'
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->redirectUsersTo(fn (Request $request): string => hub_route('home'));

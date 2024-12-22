@@ -13,7 +13,7 @@
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-    <header class="container">
+    <header class="container border-bottom border-secondary-subtle py-2">
         <a href="/">
             <img src="{{ $logo }}" alt="Logo de la team {{ $teamName }}" width="120" height="120">
         </a>
@@ -35,7 +35,7 @@
         @yield('content')
     </main>
 
-    <footer class="container text-body-secondary border-top p-2">
+    <footer class="container text-body-secondary border-top border-secondary-subtle py-2">
         <div class="row gap-2 align-items-center justify-content-center justify-content-sm-between">
             <div class="col-auto">
                 &copy; {{ $today->year }} <a href="https://epoc.fr"><img src="{{ asset('images/epoc.png') }}" alt="Logo de Maxime &quot;Epoc&quot; Gross" width="24" height="24"></a> <a href="https://epoc.fr/" class="link-secondary">Maxime "Epoc" Gross</a>
