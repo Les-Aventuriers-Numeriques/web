@@ -14,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->redirectUsersTo(fn (Request $request): string => hub_route('home'));
         $middleware->redirectGuestsTo(function (Request $request): string {
-            $request->withAlert('Merci de te connecter afin d\'accéder à cette page, on se revoit ensuite.', 'warning');
+            $request->session()->flash('warning', 'Merci de te connecter afin d\'accéder à cette page, on se revoit ensuite.');
 
             return hub_route('auth.login');
         });

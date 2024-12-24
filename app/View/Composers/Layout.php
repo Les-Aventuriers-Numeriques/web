@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\View\View;
 
-class LayoutViewComposer
+class Layout
 {
     public function compose(View $view): void
     {

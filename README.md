@@ -38,6 +38,7 @@ Python aux buts identiques, mais cette fois en utilisant [Laravel](https://larav
   8. Lancer l'environnement de développement Docker : `sail up -d`. Cette commande est lente lors du premier lancement, ce qui est normal
   9. Créer les tables avec des données de test : `sail artisan migrate --seed`
   10. Lancer Vite : `sail npm run dev`
+  11. Les projets sont accessibles aux adresses http://team-lan.test et http://hub.team-lan.test
 
 ## Usage
 

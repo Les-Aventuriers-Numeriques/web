@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\View\Composers\LayoutViewComposer;
+use App\Pubg\ApiClient;
+use App\View\Composers\Layout;
 use Artesaos\SEOTools\Facades\SEOTools;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         $this->extendSocialite();
         $this->registerMacros();
         $this->registerViewComposers();
+        $this->registerDependencies();
     }
 
     private function registerLocalOnlyPackages(): void
@@ -49,25 +50,6 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerMacros(): void
     {
-        $flashedAlert = function (string $message, string $type): array {
-            return [
-                'alert-type' => $type,
-                'alert-message' => $message,
-            ];
-        };
-
-        RedirectResponse::macro('withAlert', function (string $message, string $type) use ($flashedAlert): RedirectResponse {
-            return $this->with($flashedAlert($message, $type));
-        });
-
-        Request::macro('withAlert', function (string $message, string $type) use ($flashedAlert): Request {
-            foreach ($flashedAlert($message, $type) as $key => $value) {
-                $this->session()->flash($key, $value);
-            }
-
-            return $this;
-        });
-
         Carbon::macro('appTz', function (): Carbon {
             return $this->tz(Config::string('app.timezone_display'));
         });
@@ -97,6 +79,13 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerViewComposers(): void
     {
-        View::composer('layout', LayoutViewComposer::class);
+        View::composer('layout', Layout::class);
+    }
+
+    private function registerDependencies(): void
+    {
+        $this->app->singleton(ApiClient::class, function (Application $app) {
+            return new ApiClient(Config::string('services.pubg.token'));
+        });
     }
 }

@@ -14,6 +14,11 @@ class User extends Authenticatable
     use HasFactory;
 
     /**
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
      * @var list<string>
      */
     protected $fillable = [

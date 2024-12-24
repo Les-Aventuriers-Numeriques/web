@@ -58,4 +58,8 @@ return [
             'pubg' => (int) env('DISCORD_CHANNELS_ID_PUBG'),
         ],
     ],
+
+    'pubg' => [
+        'token' => env('PUBG_API_TOKEN'),
+    ],
 ];

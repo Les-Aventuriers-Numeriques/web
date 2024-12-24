@@ -38,7 +38,7 @@ class Auth extends Controller
         }
 
         return to_hub_route('auth.login')
-            ->withAlert("À plus $username !", 'success');
+            ->with('success', "À plus $username !");
     }
 
     public function redirect(): RedirectResponse
@@ -59,8 +59,10 @@ class Auth extends Controller
         try {
             $discordUser = $driver->user();
         } catch (InvalidStateException $e) {
+            report($e);
+
             return to_hub_route('auth.login')
-                ->withAlert("Erreur lors de la connexion avec Discord ({$e->getMessage()}). Rééssaye de zéro STP.", 'error');
+                ->with('error', "Erreur lors de la connexion avec Discord ({$e->getMessage()}). Rééssaye de zéro STP.");
         }
 
         $guildId = Config::integer('services.discord.guild_id');
@@ -81,14 +83,14 @@ class Auth extends Controller
             }
 
             return to_hub_route('auth.login')
-                ->withAlert('Tu n\'est pas présent sur notre serveur Discord.', 'warning');
+                ->with('warning', 'Tu n\'est pas présent sur notre serveur Discord.');
         }
 
         $membershipInfo = $membershipInfoResponse->object();
 
         if (! $membershipInfo) {
             return to_hub_route('auth.login')
-                ->withAlert('Réponse invalide.', 'error');
+                ->with('error', 'Réponse invalide.');
         }
 
         $roles = User::determineRoles($membershipInfo);
@@ -96,7 +98,7 @@ class Auth extends Controller
         if ($isNewUser) {
             if (! data_get($roles, 'hasAnyRole', false)) {
                 return to_hub_route('auth.login')
-                    ->withAlert('Tu n\'as pas l\'autorisation d\'accéder à notre intranet.', 'warning');
+                    ->with('warning', 'Tu n\'as pas l\'autorisation d\'accéder à notre intranet.');
             }
 
             $user = User::makeFromDiscord($discordUser);
@@ -108,12 +110,12 @@ class Auth extends Controller
 
         if (! data_get($roles, 'hasAnyRole', false)) {
             return to_hub_route('auth.login')
-                ->withAlert('Désolé, tu n\'as plus l\'autorisation d\'accéder à notre intranet.', 'warning');
+                ->with('warning', 'Désolé, tu n\'as plus l\'autorisation d\'accéder à notre intranet.');
         }
 
         AuthFacade::login($user, true);
 
         return to_hub_route('home')
-            ->withAlert(sprintf("%s $user->display_name !", $isNewUser ? 'Bienvenue' : 'Content de te revoir'), 'success');
+            ->with('success', sprintf("%s $user->display_name !", $isNewUser ? 'Bienvenue' : 'Content de te revoir'));
     }
 }
