@@ -6,19 +6,11 @@ use Illuminate\Support\Facades\Http;
 
 class ApiClient
 {
-    public function __construct(private string $token)
-    {
-    }
+    public function __construct(private string $token) {}
 
-    public function getPlayers()
-    {
+    public function getPlayers() {}
 
-    }
-
-    public function getMatch()
-    {
-
-    }
+    public function getMatch() {}
 
     private function call(string $resource): object
     {

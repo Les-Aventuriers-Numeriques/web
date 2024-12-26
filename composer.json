@@ -16,6 +16,7 @@
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "nwilging/laravel-discord-bot": "^1.1",
+        "overtrue/laravel-vote": "^3.2",
         "sentry/sentry-laravel": "^4.10",
         "socialiteproviders/discord": "^4.2",
         "spatie/laravel-flash": "^1.10"
