@@ -57,20 +57,20 @@ class Auth extends Controller
         } catch (InvalidStateException $e) {
             report($e);
 
-            flash()->error("Erreur lors de la connexion avec Discord ({$e->getMessage()}). Rééssaye de zéro STP.");
+            flash()->danger("Erreur lors de la connexion avec Discord. Rééssaye de zéro STP.");
 
             return to_hub_route('auth.login');
         }
 
         $guildId = Config::integer('services.discord.guild_id');
-        $user = User::find($discordUser->getId());
-        $isNewUser = ! $user instanceof User;
+        $user = User::findOrNew($discordUser->getId());
+        $isNewUser = ! $user->exists;
 
         $membershipInfoResponse = Http::baseUrl('https://discord.com/api')
             ->acceptJson()
             ->asJson()
             ->withToken($discordUser->token)
-            ->get("/users/@me/guilds/$guildId/member");
+            ->get("users/@me/guilds/$guildId/member");
 
         if (! $membershipInfoResponse->ok()) {
             if (! $isNewUser) {
@@ -87,28 +87,28 @@ class Auth extends Controller
         $membershipInfo = $membershipInfoResponse->object();
 
         if (! $membershipInfo) {
-            flash()->error('Réponse de Discord invalide.');
+            flash()->danger('Réponse de Discord invalide.');
 
             return to_hub_route('auth.login');
         }
 
-        $roles = User::determineRoles($membershipInfo);
-
         if ($isNewUser) {
-            if (! data_get($roles, 'hasAnyRole', false)) {
-                flash()->warning('Tu n\'as pas l\'autorisation d\'accéder à notre intranet.');
-
-                return to_hub_route('auth.login');
-            }
-
-            $user = User::makeFromDiscord($discordUser);
+            $user->id = $discordUser->getId();
         }
 
-        $user
-            ->updateFromDiscord($discordUser, $membershipInfo, $roles)
-            ->save();
+        $user->updateFromDiscord($discordUser, $membershipInfo);
 
-        if (! data_get($roles, 'hasAnyRole', false)) {
+        $hasAnyRole = $user->is_member || $user->is_lan_participant || $user->is_admin;
+
+        if ($isNewUser && ! $hasAnyRole) {
+            flash()->warning('Tu n\'as pas l\'autorisation d\'accéder à notre intranet.');
+
+            return to_hub_route('auth.login');
+        }
+
+        $user->save();
+
+        if (! $hasAnyRole) {
             flash()->warning('Désolé, tu n\'as plus l\'autorisation d\'accéder à notre intranet.');
 
             return to_hub_route('auth.login');

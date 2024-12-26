@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Pubg\ApiClient;
+use App\Pubg\PubgApiClient;
 use App\View\Composers\Layout;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Contracts\Foundation\Application;
@@ -92,8 +92,8 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerDependencies(): void
     {
-        $this->app->singleton(ApiClient::class, function (Application $app) {
-            return new ApiClient(Config::string('services.pubg.token'));
+        $this->app->singleton(PubgApiClient::class, function (Application $app) {
+            return new PubgApiClient(Config::string('services.pubg.token'));
         });
     }
 }

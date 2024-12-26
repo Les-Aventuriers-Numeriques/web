@@ -73,11 +73,11 @@ class User extends Authenticatable
         return $this;
     }
 
-    public function updateFromDiscord(DiscordUser $discordUser, object $membershipInfo, object $roles): self
+    public function updateFromDiscord(DiscordUser $discordUser, object $membershipInfo): self
     {
         $userInfo = data_get($membershipInfo, 'user');
 
-        $this->display_name = data_get($membershipInfo, 'nick') ?? $discordUser->getNickname();
+        $this->display_name = data_get($membershipInfo, 'nick') ?: $discordUser->getNickname();
 
         $memberAvatarHash = data_get($membershipInfo, 'avatar');
         $userAvatarHash = data_get($userInfo, 'avatar');
@@ -90,9 +90,11 @@ class User extends Authenticatable
             $this->avatar_url = $discordUser->getAvatar();
         }
 
-        $this->is_member = data_get($roles, 'isMember', false);
-        $this->is_lan_participant = data_get($roles, 'isLanParticipant', false);
-        $this->is_admin = data_get($roles, 'isAdmin', false);
+        $roles = data_get($membershipInfo, 'roles', []);
+
+        $this->is_member = in_array(Config::integer('services.discord.roles_id.member'), $roles);
+        $this->is_lan_participant = in_array(Config::integer('services.discord.roles_id.lan_participant'), $roles);
+        $this->is_admin = in_array(Config::integer('services.discord.roles_id.admin'), $roles);
         $this->must_relogin = false;
 
         return $this;
@@ -111,24 +113,5 @@ class User extends Authenticatable
     public function voteNo(GameProposal $votable): Vote
     {
         return $this->vote($votable, -1);
-    }
-
-    public static function makeFromDiscord(DiscordUser $discordUser): self
-    {
-        return static::make([
-            'id' => $discordUser->getId(),
-        ]);
-    }
-
-    public static function determineRoles(object $membershipInfo): object
-    {
-        $roles = data_get($membershipInfo, 'roles', []);
-
-        $isMember = in_array(Config::integer('services.discord.roles_id.member'), $roles);
-        $isLanParticipant = in_array(Config::integer('services.discord.roles_id.lan_participant'), $roles);
-        $isAdmin = in_array(Config::integer('services.discord.roles_id.admin'), $roles);
-        $hasAnyRole = $isMember || $isLanParticipant || $isAdmin;
-
-        return (object) compact('isMember', 'isLanParticipant', 'isAdmin', 'hasAnyRole');
     }
 }
