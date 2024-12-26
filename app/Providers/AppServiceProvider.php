@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use SocialiteProviders\Discord\Provider;
 use SocialiteProviders\Manager\SocialiteWasCalled;
+use Spatie\Flash\Flash;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -75,6 +76,13 @@ class AppServiceProvider extends ServiceProvider
                 'foundingDate' => $founded->toDateString(),
             ];
         });
+
+        Flash::levels([
+            'success' => 'alert alert-success',
+            'danger' => 'alert alert-danger',
+            'warning' => 'alert alert-warning',
+            'info' => 'alert alert-info',
+        ]);
     }
 
     private function registerViewComposers(): void

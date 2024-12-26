@@ -10,7 +10,7 @@ class SitemapXml extends Controller
     /**
      * @var string
      */
-    private const NS = 'http://www.sitemaps.org/schemas/sitemap/0.9';
+    private const string NS = 'http://www.sitemaps.org/schemas/sitemap/0.9';
 
     public function __invoke(): Response
     {

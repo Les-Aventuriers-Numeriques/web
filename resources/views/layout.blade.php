@@ -26,7 +26,11 @@
     <main class="container">
         <h1>{{ SEO::getTitle(true) }}</h1>
 
-        <x-alert></x-alert>
+        @if (flash()->message)
+            <div class="{{ flash()->class }}" role="alert">
+                {{ flash()->message }}
+            </div>
+        @endif
 
         @yield('content')
     </main>

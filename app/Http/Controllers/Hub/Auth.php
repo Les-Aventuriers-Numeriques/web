@@ -25,20 +25,16 @@ class Auth extends Controller
 
     public function logout(Request $request): RedirectResponse
     {
-        $user = $request->user();
-        $username = '';
+        $displayName = AuthFacade::user()?->display_name;
 
-        if ($user) {
-            $username = $user->display_name;
+        AuthFacade::logout();
 
-            AuthFacade::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-        }
+        flash()->success("À plus $displayName !");
 
-        return to_hub_route('auth.login')
-            ->with('success', "À plus $username !");
+        return to_hub_route('auth.login');
     }
 
     public function redirect(): RedirectResponse
@@ -61,8 +57,9 @@ class Auth extends Controller
         } catch (InvalidStateException $e) {
             report($e);
 
-            return to_hub_route('auth.login')
-                ->with('error', "Erreur lors de la connexion avec Discord ({$e->getMessage()}). Rééssaye de zéro STP.");
+            flash()->error("Erreur lors de la connexion avec Discord ({$e->getMessage()}). Rééssaye de zéro STP.");
+
+            return to_hub_route('auth.login');
         }
 
         $guildId = Config::integer('services.discord.guild_id');
@@ -82,23 +79,26 @@ class Auth extends Controller
                     ->save();
             }
 
-            return to_hub_route('auth.login')
-                ->with('warning', 'Tu n\'est pas présent sur notre serveur Discord.');
+            flash()->warning('Tu n\'est pas présent sur notre serveur Discord.');
+
+            return to_hub_route('auth.login');
         }
 
         $membershipInfo = $membershipInfoResponse->object();
 
         if (! $membershipInfo) {
-            return to_hub_route('auth.login')
-                ->with('error', 'Réponse invalide.');
+            flash()->error('Réponse de Discord invalide.');
+
+            return to_hub_route('auth.login');
         }
 
         $roles = User::determineRoles($membershipInfo);
 
         if ($isNewUser) {
             if (! data_get($roles, 'hasAnyRole', false)) {
-                return to_hub_route('auth.login')
-                    ->with('warning', 'Tu n\'as pas l\'autorisation d\'accéder à notre intranet.');
+                flash()->warning('Tu n\'as pas l\'autorisation d\'accéder à notre intranet.');
+
+                return to_hub_route('auth.login');
             }
 
             $user = User::makeFromDiscord($discordUser);
@@ -109,13 +109,15 @@ class Auth extends Controller
             ->save();
 
         if (! data_get($roles, 'hasAnyRole', false)) {
-            return to_hub_route('auth.login')
-                ->with('warning', 'Désolé, tu n\'as plus l\'autorisation d\'accéder à notre intranet.');
+            flash()->warning('Désolé, tu n\'as plus l\'autorisation d\'accéder à notre intranet.');
+
+            return to_hub_route('auth.login');
         }
 
         AuthFacade::login($user, true);
 
-        return to_hub_route('home')
-            ->with('success', sprintf("%s $user->display_name !", $isNewUser ? 'Bienvenue' : 'Content de te revoir'));
+        flash()->success(sprintf("%s $user->display_name !", $isNewUser ? 'Bienvenue' : 'Content de te revoir'));
+
+        return to_hub_route('home');
     }
 }
