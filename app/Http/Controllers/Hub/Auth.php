@@ -57,7 +57,7 @@ class Auth extends Controller
         } catch (InvalidStateException $e) {
             report($e);
 
-            flash()->danger("Erreur lors de la connexion avec Discord. Rééssaye de zéro STP.");
+            flash()->danger('Erreur lors de la connexion avec Discord. Rééssaye de zéro STP.');
 
             return to_hub_route('auth.login');
         }
