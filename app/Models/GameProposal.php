@@ -6,11 +6,12 @@ use Database\Factories\GameProposalFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Overtrue\LaravelVote\Traits\Votable;
 
 class GameProposal extends Model
 {
     /** @use HasFactory<GameProposalFactory> */
-    use HasFactory;
+    use HasFactory, Votable;
 
     /**
      * @var string

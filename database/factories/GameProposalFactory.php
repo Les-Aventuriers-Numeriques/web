@@ -15,9 +15,6 @@ class GameProposalFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'game_id' => fake()->unique()->randomNumber(),
-            'user_id' => fake()->unique()->randomNumber(),
-        ];
+        return [];
     }
 }

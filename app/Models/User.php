@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Config;
 use Laravel\Socialite\Two\User as DiscordUser;
+use Overtrue\LaravelVote\Traits\Voter;
+use Overtrue\LaravelVote\Vote;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory;
+    use HasFactory, Voter;
 
     /**
      * @var bool
@@ -94,6 +96,21 @@ class User extends Authenticatable
         $this->must_relogin = false;
 
         return $this;
+    }
+
+    public function voteYes(GameProposal $votable): Vote
+    {
+        return $this->vote($votable, 2);
+    }
+
+    public function voteMaybe(GameProposal $votable): Vote
+    {
+        return $this->vote($votable, 1);
+    }
+
+    public function voteNo(GameProposal $votable): Vote
+    {
+        return $this->vote($votable, -1);
     }
 
     public static function makeFromDiscord(DiscordUser $discordUser): self
