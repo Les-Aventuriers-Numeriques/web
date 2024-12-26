@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\GameFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Game extends Model
 {
@@ -57,5 +58,13 @@ class Game extends Model
         return $this->is_custom
             ? asset("images/games/$this->id.png")
             : "https://cdn.cloudflare.steamstatic.com/steam/apps/$this->id/capsule_231x87.jpg";
+    }
+
+    /**
+     * @return HasMany<GameProposal>
+     */
+    public function proposals(): HasMany
+    {
+        return $this->hasMany(GameProposal::class);
     }
 }

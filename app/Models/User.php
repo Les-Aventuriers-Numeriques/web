@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Config;
 use Laravel\Socialite\Two\User as DiscordUser;
@@ -113,5 +114,13 @@ class User extends Authenticatable
     public function voteNo(GameProposal $votable): Vote
     {
         return $this->vote($votable, -1);
+    }
+
+    /**
+     * @return HasMany<GameProposal>
+     */
+    public function gameProposals(): HasMany
+    {
+        return $this->hasMany(GameProposal::class);
     }
 }
