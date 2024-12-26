@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\LogoutUserIfMustRelogin;
+use App\Http\Middleware\SetAppContext;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'logout_if_must_relogin' => LogoutUserIfMustRelogin::class,
+            'set_app_context' => SetAppContext::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

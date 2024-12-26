@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller as BaseController;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\View;
 
 abstract class Controller extends BaseController
 {
@@ -41,12 +40,5 @@ abstract class Controller extends BaseController
             ->setType('WebPage')
             ->setUrl(URL::current())
             ->addValue('mainEntity', SEOTools::organizationJsonLd());
-
-        // Données globales pour la vue
-        View::share([
-            'pageTitle' => $teamName,
-            'pageTitleUrl' => site_route('home'),
-            'pageSubTitle' => $motto,
-        ]);
     }
 }

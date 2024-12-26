@@ -66,6 +66,10 @@ class Auth extends Controller
         $user = User::findOrNew($discordUser->getId());
         $isNewUser = ! $user->exists;
 
+        if ($isNewUser) {
+            $user->id = $discordUser->getId();
+        }
+
         $membershipInfoResponse = Http::baseUrl('https://discord.com/api')
             ->acceptJson()
             ->asJson()
@@ -90,10 +94,6 @@ class Auth extends Controller
             flash()->danger('Réponse de Discord invalide.');
 
             return to_hub_route('auth.login');
-        }
-
-        if ($isNewUser) {
-            $user->id = $discordUser->getId();
         }
 
         $user->updateFromDiscord($discordUser, $membershipInfo);

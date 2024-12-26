@@ -10,9 +10,11 @@ Route::name('web.')
         Route::name('site.')
             ->domain($domain)
             ->withoutMiddleware('web')
+            ->middleware('set_app_context')
             ->group(base_path('routes/site.php'));
 
         Route::name('hub.')
             ->domain("hub.$domain")
+            ->middleware('set_app_context')
             ->group(base_path('routes/hub.php'));
     });

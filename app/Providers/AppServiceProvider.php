@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Pubg\PubgApiClient;
+use App\Services\PubgApiClient;
 use App\View\Composers\Layout;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Contracts\Foundation\Application;
