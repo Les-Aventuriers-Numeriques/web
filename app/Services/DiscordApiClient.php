@@ -16,27 +16,23 @@ class DiscordApiClient
         return $this;
     }
 
-    public function getGuildMembership(int $guildId): object
+    public function getGuildMembership(int $guildId): ?object
     {
         return $this->call("users/@me/guilds/$guildId/member");
     }
 
-    private function call(string $resource): object
+    private function call(string $resource): ?object
     {
         if (! $this->token) {
-            throw new InvalidArgumentException('Discord API client requires a token to be set');
+            throw new InvalidArgumentException('Discord API client requires an access token to be set');
         }
 
-        $response = Http::baseUrl('https://discord.com/api')
+        return Http::baseUrl('https://discord.com/api')
             ->asJson()
             ->acceptJson()
             ->withToken($this->token)
             ->get($resource)
             ->throw()
             ->object();
-
-        return is_array($response)
-            ? collect($response)
-            : $response;
     }
 }

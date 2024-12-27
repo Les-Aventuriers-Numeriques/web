@@ -14,7 +14,7 @@ class PubgApiClient
      * @param  list<string>  $playersName
      * @param  list<string>  $playersId
      */
-    public function getPlayers(string $shard, array $playersName = [], array $playersId = []): object
+    public function getPlayers(string $shard, array $playersName = [], array $playersId = []): ?object
     {
         if ((! $playersName && ! $playersId) || ($playersName && $playersId)) {
             throw new InvalidArgumentException('Either $playersName or $playersId must be provided');
@@ -31,7 +31,7 @@ class PubgApiClient
         );
     }
 
-    public function getMatch(string $shard, string $matchId): object
+    public function getMatch(string $shard, string $matchId): ?object
     {
         return $this->call(
             "shards/$shard/matches/$matchId",
@@ -39,9 +39,12 @@ class PubgApiClient
         );
     }
 
-    private function call(string $resource, array $params = [], bool $needsAuth = true): object
+    /**
+     * @param array<array-key, mixed> $params
+     */
+    private function call(string $resource, array $params = [], bool $needsAuth = true): ?object
     {
-        $response = Http::baseUrl('https://api.pubg.com/')
+        return Http::baseUrl('https://api.pubg.com/')
             ->asJson()
             ->accept('application/vnd.api+json')
             ->withHeader('Accept-Encoding', 'gzip')
@@ -56,9 +59,5 @@ class PubgApiClient
             ->get($resource)
             ->throw()
             ->object();
-
-        return is_array($response)
-            ? collect($response)
-            : $response;
     }
 }

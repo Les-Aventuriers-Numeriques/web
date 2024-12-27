@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\PubgApiClient;
+use App\Services\SteamApiClient;
 use App\View\Composers\Layout;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Contracts\Foundation\Application;
@@ -94,6 +95,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(PubgApiClient::class, function (Application $app) {
             return new PubgApiClient(Config::string('services.pubg.token'));
+        });
+
+        $this->app->singleton(SteamApiClient::class, function (Application $app) {
+            return new SteamApiClient(Config::string('services.steam.key'));
         });
     }
 }

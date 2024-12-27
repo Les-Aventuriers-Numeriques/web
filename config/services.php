@@ -61,5 +61,13 @@ return [
 
     'pubg' => [
         'token' => env('PUBG_API_TOKEN'),
+        'players_name' => [
+            'internal' => env('PUBG_PLAYERS_NAME_INTERNAL'),
+            'external' => env('PUBG_PLAYERS_NAME_EXTERNAL'),
+        ],
+    ],
+
+    'steam' => [
+        'key' => env('STEAM_API_KEY'),
     ],
 ];

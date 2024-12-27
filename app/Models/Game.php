@@ -61,7 +61,7 @@ class Game extends Model
     }
 
     /**
-     * @return HasMany<GameProposal>
+     * @return HasMany<GameProposal, Game>
      */
     public function proposals(): HasMany
     {

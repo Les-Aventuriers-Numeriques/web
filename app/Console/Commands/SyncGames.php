@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\SteamApiClient;
 use Illuminate\Console\Command;
 
 class SyncGames extends Command
@@ -14,9 +15,9 @@ class SyncGames extends Command
     /**
      * @var string
      */
-    protected $description = 'Syncs games from Steam to the DB';
+    protected $description = 'Sync games from Steam';
 
-    public function handle(): int
+    public function handle(SteamApiClient $steamApiClient): int
     {
         return self::SUCCESS;
     }

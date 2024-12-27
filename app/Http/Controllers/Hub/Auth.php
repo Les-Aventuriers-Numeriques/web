@@ -68,7 +68,7 @@ class Auth extends Controller
         $isNewUser = ! $user->exists;
 
         if ($isNewUser) {
-            $user->id = $discordUser->getId();
+            $user->id = (int) $discordUser->getId();
         }
 
         try {
@@ -83,6 +83,12 @@ class Auth extends Controller
             }
 
             flash()->warning('Tu n\'est pas présent sur notre serveur Discord.');
+
+            return to_hub_route('auth.login');
+        }
+
+        if (! $membershipInfo) {
+            flash()->danger('Réponse de Discord invalide.');
 
             return to_hub_route('auth.login');
         }
