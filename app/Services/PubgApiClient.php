@@ -41,7 +41,7 @@ class PubgApiClient
 
     private function call(string $resource, array $params = [], bool $needsAuth = true): object
     {
-        return Http::baseUrl('https://api.pubg.com/')
+        $response = Http::baseUrl('https://api.pubg.com/')
             ->asJson()
             ->accept('application/vnd.api+json')
             ->withHeader('Accept-Encoding', 'gzip')
@@ -56,5 +56,9 @@ class PubgApiClient
             ->get($resource)
             ->throw()
             ->object();
+
+        return is_array($response)
+            ? collect($response)
+            : $response;
     }
 }

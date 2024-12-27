@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Hub;
 
 use App\Models\User;
+use App\Services\DiscordApiClient;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as AuthFacade;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
 use SocialiteProviders\Discord\Provider;
@@ -47,7 +48,7 @@ class Auth extends Controller
             ->redirect();
     }
 
-    public function callback(): RedirectResponse
+    public function callback(DiscordApiClient $discordApiClient): RedirectResponse
     {
         /** @var Provider $driver */
         $driver = Socialite::driver('discord');
@@ -70,13 +71,11 @@ class Auth extends Controller
             $user->id = $discordUser->getId();
         }
 
-        $membershipInfoResponse = Http::baseUrl('https://discord.com/api')
-            ->acceptJson()
-            ->asJson()
-            ->withToken($discordUser->token)
-            ->get("users/@me/guilds/$guildId/member");
-
-        if (! $membershipInfoResponse->ok()) {
+        try {
+            $membershipInfo = $discordApiClient
+                ->withToken($discordUser->token)
+                ->getGuildMembership($guildId);
+        } catch (RequestException) {
             if (! $isNewUser) {
                 $user
                     ->resetRoles()
@@ -84,14 +83,6 @@ class Auth extends Controller
             }
 
             flash()->warning('Tu n\'est pas présent sur notre serveur Discord.');
-
-            return to_hub_route('auth.login');
-        }
-
-        $membershipInfo = $membershipInfoResponse->object();
-
-        if (! $membershipInfo) {
-            flash()->danger('Réponse de Discord invalide.');
 
             return to_hub_route('auth.login');
         }
