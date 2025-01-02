@@ -30,7 +30,7 @@ class SyncGames extends Command
             $this->line('Téléchargement du paquet...');
 
             $response = $steamApiClient->getAppList($lastAppId, includeDlc: false, includeSoftware: false, includeVideos: false,
-                    includeHardware: false);
+                includeHardware: false);
 
             $games = collect($response->apps ?? []);
 
