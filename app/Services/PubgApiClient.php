@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 class PubgApiClient
 {
-    public function __construct(private string $token) {}
+    public function __construct(private ?string $token) {}
 
     /**
      * @param  list<string>  $playersName
@@ -40,9 +40,9 @@ class PubgApiClient
     }
 
     /**
-     * @param array<array-key, mixed> $params
+     * @param  array<array-key, mixed>  $params
      */
-    private function call(string $resource, array $params = [], bool $needsAuth = true): ?object
+    private function call(string $resource, array $params = [], string $method = 'get', bool $needsAuth = true): ?object
     {
         return Http::baseUrl('https://api.pubg.com/')
             ->asJson()
@@ -56,7 +56,7 @@ class PubgApiClient
 
                 $request->withToken($this->token);
             })
-            ->get($resource)
+            ->send($method, $resource)
             ->throw()
             ->object();
     }

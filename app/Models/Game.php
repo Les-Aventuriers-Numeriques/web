@@ -32,6 +32,13 @@ class Game extends Model
     ];
 
     /**
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'custom_url' => null,
+    ];
+
+    /**
      * @return array<string, string>
      */
     protected function casts(): array

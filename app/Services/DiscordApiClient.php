@@ -21,7 +21,7 @@ class DiscordApiClient
         return $this->call("users/@me/guilds/$guildId/member");
     }
 
-    private function call(string $resource): ?object
+    private function call(string $resource, string $method = 'get'): ?object
     {
         if (! $this->token) {
             throw new InvalidArgumentException('Discord API client requires an access token to be set');
@@ -31,7 +31,7 @@ class DiscordApiClient
             ->asJson()
             ->acceptJson()
             ->withToken($this->token)
-            ->get($resource)
+            ->send($method, $resource)
             ->throw()
             ->object();
     }

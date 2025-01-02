@@ -5,6 +5,9 @@ includes:
 parameters:
     paths:
         - app/
+        - bootstrap/
         - database/
         - routes/
     level: 8
+    excludePaths:
+        - bootstrap/cache

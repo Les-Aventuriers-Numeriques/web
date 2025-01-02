@@ -13,23 +13,24 @@ class SteamApiClient
         bool $includeSoftware = true, bool $includeVideos = true, bool $includeHardware = true
     ): ?object {
         return $this->call(
-            'IStoreService/GetAppList/v1/',
+            'IStoreService',
+            'GetAppList',
             [
                 'last_appid' => $lastAppId,
                 'max_results' => $maxResults,
-                'include_games' => $includeGames,
-                'include_dlc' => $includeDlc,
-                'include_software' => $includeSoftware,
-                'include_videos' => $includeVideos,
-                'include_hardware' => $includeHardware,
+                'include_games' => $includeGames ? 'true' : 'false',
+                'include_dlc' => $includeDlc ? 'true' : 'false',
+                'include_software' => $includeSoftware ? 'true' : 'false',
+                'include_videos' => $includeVideos ? 'true' : 'false',
+                'include_hardware' => $includeHardware ? 'true' : 'false',
             ]
-        )->response;
+        )?->response;
     }
 
     /**
-     * @param array<array-key, mixed> $params
+     * @param  array<array-key, mixed>  $params
      */
-    private function call(string $resource, array $params = []): ?object
+    private function call(string $service, string $method, array $params = [], int $version = 1, string $httpMethod = 'get'): ?object
     {
         return Http::baseUrl('https://api.steampowered.com')
             ->asJson()
@@ -40,7 +41,7 @@ class SteamApiClient
                 ],
                 $params
             ))
-            ->get($resource)
+            ->send($httpMethod, "$service/$method/v$version")
             ->throw()
             ->object();
     }

@@ -45,6 +45,7 @@ class User extends Authenticatable
      * @var array<string, mixed>
      */
     protected $attributes = [
+        'avatar_url' => null,
         'is_member' => false,
         'is_lan_participant' => false,
         'is_admin' => false,
