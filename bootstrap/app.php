@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\PubgSummary;
 use App\Http\Middleware\LogoutUserIfMustRelogin;
 use App\Http\Middleware\SetAppContext;
 use Illuminate\Foundation\Application;
@@ -7,6 +8,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Sentry\Laravel\Integration;
+use Illuminate\Console\Scheduling\Schedule;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -29,4 +31,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->dontTruncateRequestExceptions();
 
         Integration::handles($exceptions);
-    })->create();
+    })
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->command(PubgSummary::class)
+            ->everyTwoMinutes()
+            ->between('09:00', '23:59')
+            ->between('00:00', '01:00')
+            ->withoutOverlapping()
+            ->runInBackground()
+            ->sentryMonitor();
+    })
+    ->create();

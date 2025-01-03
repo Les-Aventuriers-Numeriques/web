@@ -57,7 +57,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Carbon::macro('appTz', function (): Carbon {
             /** @var Carbon $this */
-            return $this->tz(Config::string('app.timezone_display'));
+            return $this->tz(Config::string('app.display_timezone'));
         });
 
         SEOTools::macro('organizationJsonLd', function (): array {

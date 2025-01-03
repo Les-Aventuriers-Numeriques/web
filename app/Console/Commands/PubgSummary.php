@@ -5,12 +5,12 @@ namespace App\Console\Commands;
 use App\Services\PubgApiClient;
 use Illuminate\Console\Command;
 
-class PubgMatch extends Command
+class PubgSummary extends Command
 {
     /**
      * @var string
      */
-    protected $signature = 'app:pubg-match';
+    protected $signature = 'app:pubg-summary';
 
     /**
      * @var string
