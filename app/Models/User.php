@@ -30,6 +30,7 @@ class User extends Authenticatable
         'avatar_url',
         'is_member',
         'is_lan_participant',
+        'is_lan_organizer',
         'is_admin',
         'must_relogin',
     ];
@@ -48,6 +49,7 @@ class User extends Authenticatable
         'avatar_url' => null,
         'is_member' => false,
         'is_lan_participant' => false,
+        'is_lan_organizer' => false,
         'is_admin' => false,
         'must_relogin' => false,
     ];
@@ -63,6 +65,7 @@ class User extends Authenticatable
             'avatar_url' => 'string',
             'is_member' => 'boolean',
             'is_lan_participant' => 'boolean',
+            'is_lan_organizer' => 'boolean',
             'is_admin' => 'boolean',
             'must_relogin' => 'boolean',
         ];
@@ -70,7 +73,7 @@ class User extends Authenticatable
 
     public function resetRoles(): self
     {
-        $this->is_member = $this->is_lan_participant = $this->is_admin = false;
+        $this->is_member = $this->is_lan_participant = $this->is_lan_organizer = $this->is_admin = false;
 
         return $this;
     }
@@ -96,6 +99,7 @@ class User extends Authenticatable
 
         $this->is_member = in_array(Config::integer('services.discord.roles_id.member'), $roles);
         $this->is_lan_participant = in_array(Config::integer('services.discord.roles_id.lan_participant'), $roles);
+        $this->is_lan_organizer = in_array(Config::integer('services.discord.roles_id.lan_organizer'), $roles);
         $this->is_admin = in_array(Config::integer('services.discord.roles_id.admin'), $roles);
         $this->must_relogin = false;
 

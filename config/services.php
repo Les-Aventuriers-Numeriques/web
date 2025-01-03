@@ -50,6 +50,7 @@ return [
         'roles_id' => [
             'member' => (int) env('DISCORD_ROLES_ID_MEMBER'),
             'lan_participant' => (int) env('DISCORD_ROLES_ID_LAN_PARTICIPANT'),
+            'is_lan_organizer' => (int) env('DISCORD_ROLES_ID_LAN_ORGANIZER'),
             'admin' => (int) env('DISCORD_ROLES_ID_ADMIN'),
         ],
 

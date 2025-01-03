@@ -95,7 +95,7 @@ class Auth extends Controller
 
         $user->updateFromDiscord($discordUser, $membershipInfo);
 
-        $hasAnyRole = $user->is_member || $user->is_lan_participant || $user->is_admin;
+        $hasAnyRole = $user->is_member || $user->is_lan_participant || $user->is_lan_organizer || $user->is_admin;
 
         if ($isNewUser && ! $hasAnyRole) {
             flash()->warning('Tu n\'as pas l\'autorisation d\'accéder à notre intranet.');
