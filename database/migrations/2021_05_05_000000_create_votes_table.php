@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create(config('vote.votes_table'), function (Blueprint $table) {
+        Schema::create('votes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger(config('vote.user_foreign_key'))->index()->comment('user_id');
+            $table->unsignedBigInteger('user_id')->index()->comment('user_id');
             $table->integer('votes');
             $table->morphs('votable');
             $table->timestamps();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(config('vote.votes_table'));
+        Schema::dropIfExists('votes');
     }
 };

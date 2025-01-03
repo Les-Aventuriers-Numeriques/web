@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\GameProposal;
 use App\Services\PubgApiClient;
 use App\Services\SteamApiClient;
 use App\View\Composers\Layout;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
@@ -28,7 +30,8 @@ class AppServiceProvider extends ServiceProvider
         $this->extendSocialite();
         $this->registerMacros();
         $this->registerViewComposers();
-        $this->registerDependencies();
+        $this->registerServices();
+        $this->registerMorphMap();
     }
 
     private function registerLocalOnlyPackages(): void
@@ -91,7 +94,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layout', Layout::class);
     }
 
-    private function registerDependencies(): void
+    private function registerServices(): void
     {
         $this->app->singleton(PubgApiClient::class, function (Application $app) {
             return new PubgApiClient(Config::string('services.pubg.token'));
@@ -100,5 +103,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SteamApiClient::class, function (Application $app) {
             return new SteamApiClient(Config::string('services.steam.key'));
         });
+    }
+
+    private function registerMorphMap(): void
+    {
+        Relation::enforceMorphMap([
+            'game_proposal' => GameProposal::class,
+        ]);
     }
 }
