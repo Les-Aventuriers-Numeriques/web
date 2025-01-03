@@ -3,15 +3,18 @@
 namespace App\Providers;
 
 use App\Models\GameProposal;
+use App\Models\User;
 use App\Services\PubgApiClient;
 use App\Services\SteamApiClient;
 use App\View\Composers\Layout;
 use Artesaos\SEOTools\Facades\SEOTools;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use SocialiteProviders\Discord\Provider;
@@ -32,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerViewComposers();
         $this->registerServices();
         $this->registerMorphMap();
+        $this->registerGates();
     }
 
     private function registerLocalOnlyPackages(): void
@@ -111,5 +115,24 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'game_proposal' => GameProposal::class,
         ]);
+    }
+
+    private function registerGates(): void
+    {
+        Gate::before(function (User $user, string $ability) {
+            return $user->is_admin ? true : null;
+        });
+
+        Gate::define('administrate', function (User $user) {
+            return $user->is_admin
+                ? Response::allow()
+                : Response::deny('Hop hop hop.');
+        });
+
+        Gate::define('access-lan-games', function (User $user) {
+            return $user->is_lan_participant
+                ? Response::allow()
+                : Response::deny('Désolé, tu ne fais pas partie des participants à la LAN.');
+        });
     }
 }
