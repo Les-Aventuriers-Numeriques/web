@@ -19,7 +19,7 @@ class SetAppContext
         $route = $request->route();
 
         if ($route instanceof Route) {
-            $domain = Config::string('team-lan.domain');
+            $domain = Config::string('app.domain');
 
             Context::add(
                 'app',

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
-$domain = Config::string('team-lan.domain');
+$domain = Config::string('app.domain');
 
 Route::name('web.')
     ->group(function () use ($domain) {

@@ -3,8 +3,6 @@
 use Illuminate\Support\Facades\Date;
 
 return [
-    'domain' => env('APP_DOMAIN'),
-
     'team_name' => 'Les Aventuriers Numériques',
     'team_short_name' => 'LAN',
     'motto' => 'Une team multigaming francophone et conviviale',
