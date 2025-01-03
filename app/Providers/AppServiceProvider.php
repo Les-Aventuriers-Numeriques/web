@@ -56,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
     private function registerMacros(): void
     {
         Carbon::macro('appTz', function (): Carbon {
+            /** @var Carbon $this */
             return $this->tz(Config::string('app.timezone_display'));
         });
 

@@ -68,7 +68,7 @@ class Game extends Model
     }
 
     /**
-     * @return HasMany<GameProposal, Game>
+     * @return HasMany<GameProposal, $this>
      */
     public function proposals(): HasMany
     {

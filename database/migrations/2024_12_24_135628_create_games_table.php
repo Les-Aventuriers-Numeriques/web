@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('games', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->bigInteger('id')->primary();
             $table->string('name');
             $table->string('custom_url')->nullable();
         });

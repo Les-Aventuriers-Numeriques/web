@@ -38,7 +38,7 @@
     <footer class="container text-body-secondary border-top border-secondary-subtle py-2">
         <div class="row gap-2 align-items-center justify-content-center justify-content-sm-between">
             <div class="col-auto">
-                &copy; {{ $today->year }} <a href="https://epoc.fr"><img src="{{ asset('images/epoc.png') }}" alt="Logo de Maxime &quot;Epoc&quot; Gross" width="24" height="24"></a> <a href="https://epoc.fr/" class="link-secondary">Maxime "Epoc" Gross</a>
+                &copy; 2023 - {{ $today->year }} <a href="https://epoc.fr"><img src="{{ asset('images/epoc.png') }}" alt="Logo de Maxime &quot;Epoc&quot; Gross" width="24" height="24"></a> <a href="https://epoc.fr/" class="link-secondary">Maxime "Epoc" Gross</a>
             </div>
             <div class="col-auto fs-2 d-flex flex-row column-gap-3">
                 @foreach($socialLinks as $icon => $url)

@@ -43,7 +43,7 @@ class GameProposal extends Model
     }
 
     /**
-     * @return BelongsTo<User, GameProposal>
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
@@ -51,7 +51,7 @@ class GameProposal extends Model
     }
 
     /**
-     * @return BelongsTo<Game, GameProposal>
+     * @return BelongsTo<Game, $this>
      */
     public function game(): BelongsTo
     {

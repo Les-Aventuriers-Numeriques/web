@@ -118,7 +118,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return HasMany<GameProposal, User>
+     * @return HasMany<GameProposal, $this>
      */
     public function gameProposals(): HasMany
     {

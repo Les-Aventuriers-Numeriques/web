@@ -9,7 +9,7 @@ class SteamApiClient
     public function __construct(private string $key) {}
 
     public function getAppList(
-        ?int $lastAppId = null, ?int $maxResults = 2000, bool $includeGames = true, bool $includeDlc = true,
+        ?int $lastAppId = null, ?int $maxResults = 3000, bool $includeGames = true, bool $includeDlc = true,
         bool $includeSoftware = true, bool $includeVideos = true, bool $includeHardware = true
     ): ?object {
         return $this->call(

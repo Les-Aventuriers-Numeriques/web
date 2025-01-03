@@ -15,7 +15,11 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->index()->comment('user_id');
             $table->integer('votes');
-            $table->morphs('votable');
+
+            $table->string('votable_type');
+            $table->bigInteger('votable_id');
+            $table->index(['votable_type', 'votable_id']);
+
             $table->timestamps();
         });
     }
