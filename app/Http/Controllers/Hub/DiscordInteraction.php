@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Hub;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Nwilging\LaravelDiscordBot\Contracts\Services\DiscordInteractionServiceContract;

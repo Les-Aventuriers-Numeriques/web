@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Site;
 
-use App\Http\Controllers\Controller as BaseController;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
 
-abstract class Controller extends BaseController
+abstract class Controller
 {
     public function __construct()
     {

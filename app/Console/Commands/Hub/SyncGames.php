@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Hub;
 
 use App\Models\Game;
 use App\Services\SteamApiClient;
-use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use League\Csv\Reader;
 

@@ -6,15 +6,14 @@ use Illuminate\Support\Facades\Route;
 $domain = Config::string('app.domain');
 
 Route::name('web.')
+    ->middleware('set_app_context')
     ->group(function () use ($domain) {
         Route::name('site.')
             ->domain($domain)
             ->withoutMiddleware('web')
-            ->middleware('set_app_context')
             ->group(base_path('routes/site.php'));
 
         Route::name('hub.')
             ->domain("hub.$domain")
-            ->middleware('set_app_context')
             ->group(base_path('routes/hub.php'));
     });

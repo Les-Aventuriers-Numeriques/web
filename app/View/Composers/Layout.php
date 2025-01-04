@@ -22,18 +22,22 @@ class Layout
         $motto = Config::string('team-lan.motto');
         $app = Context::get('app');
 
+        $pageTitle = $pageTitleUrl = $pageSubTitle = '';
+
         if ($app == 'site') {
-            $view->with([
-                'pageTitle' => $teamName,
-                'pageTitleUrl' => site_route('home'),
-                'pageSubTitle' => $motto,
-            ]);
+            $pageTitle = $teamName;
+            $pageTitleUrl = site_route('home');
+            $pageSubTitle = $motto;
         } elseif ($app == 'hub') {
-            $view->with([
-                'pageTitle' => 'Hub',
-                'pageTitleUrl' => hub_route('home'),
-                'pageSubTitle' => $teamName,
-            ]);
+            $pageTitle = 'Hub';
+            $pageTitleUrl = hub_route('home');
+            $pageSubTitle = $teamName;
         }
+
+        $view->with([
+            'pageTitle' => $pageTitle,
+            'pageTitleUrl' => $pageTitleUrl,
+            'pageSubTitle' => $pageSubTitle,
+        ]);
     }
 }

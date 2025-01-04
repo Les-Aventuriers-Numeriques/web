@@ -1,8 +1,8 @@
 <?php
 
-use App\Console\Commands\PubgSummary;
-use App\Http\Middleware\LogoutUserIfMustRelogin;
-use App\Http\Middleware\SetAppContext;
+use App\Console\Commands\Hub\PubgSummary;
+use App\Http\Middleware\Hub\LogoutUserIfMustRelogin;
+use App\Http\Middleware\Hub\SetAppContext;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -39,6 +39,6 @@ return Application::configure(basePath: dirname(__DIR__))
             ->between('00:00', '01:00')
             ->withoutOverlapping()
             ->runInBackground()
-            ->sentryMonitor();
+            ->emailOutputOnFailure(config('mail.send_failed_scheduled_tasks_to'));
     })
     ->create();

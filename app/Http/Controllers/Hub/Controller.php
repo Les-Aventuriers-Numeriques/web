@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Hub;
 
-use App\Http\Controllers\Controller as BaseController;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Config;
 
-abstract class Controller extends BaseController
+abstract class Controller
 {
     public function __construct()
     {

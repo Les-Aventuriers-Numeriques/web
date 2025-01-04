@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Hub;
 
 use App\Services\PubgApiClient;
-use Illuminate\Console\Command;
 
 class PubgSummary extends Command
 {

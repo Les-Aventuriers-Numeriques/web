@@ -113,4 +113,5 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    'send_failed_scheduled_tasks_to' => env('EMAIL_SEND_FAILED_SCHEDULED_TASKS_TO'),
 ];

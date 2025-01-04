@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Hub;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -21,14 +21,19 @@ class SetAppContext
         if ($route instanceof Route) {
             $domain = Config::string('app.domain');
 
-            Context::add(
-                'app',
-                match ($route->domain()) {
-                    $domain => 'site',
-                    "hub.$domain" => 'hub',
-                    default => null
-                }
-            );
+            $app = match ($route->domain()) {
+                $domain => 'site',
+                "hub.$domain" => 'hub',
+                default => null
+            };
+
+            if ($app == 'hub') {
+                config([
+                    'app.name' => 'Hub '.config('app.name'),
+                ]);
+            }
+
+            Context::add('app', $app);
         }
 
         return $next($request);

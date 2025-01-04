@@ -119,17 +119,17 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerGates(): void
     {
-        Gate::before(function (User $user, string $ability) {
+        Gate::before(function (User $user, string $ability): ?bool {
             return $user->is_admin ? true : null;
         });
 
-        Gate::define('administrate', function (User $user) {
+        Gate::define('administrate', function (User $user): Response {
             return $user->is_admin
                 ? Response::allow()
-                : Response::deny('Hop hop hop.');
+                : Response::deny('Hop hop hop non.');
         });
 
-        Gate::define('access-lan-games', function (User $user) {
+        Gate::define('access-lan-games', function (User $user): Response {
             return $user->is_lan_participant
                 ? Response::allow()
                 : Response::deny('Désolé, tu ne fais pas partie des participants à la LAN.');
